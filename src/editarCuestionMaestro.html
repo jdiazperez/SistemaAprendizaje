@@ -16,6 +16,15 @@
 </head>
 
 <body>
+    <header id="headerGuardar" class="fixed-top bg-dark">
+        <div class="container">
+            <div class="row justify-content-end">
+                <button class="btn btn-danger"><i class="fa fa-times mr-2"></i>Cancelar</button>
+                <button class="btn btn-success ml-2"><i class="fa fa-save mr-2"></i>Guardar</button>
+
+            </div>
+        </div>
+    </header>
 
     <header>
         <nav id="navbar" class="navbar navbar-expand-sm navbar-dark bg-primary fixed-top pt-3">
@@ -33,12 +42,14 @@
         </nav>
     </header>
 
+
+
     <section>
 
 
         <form action="#">
 
-            <div class="container bg-light border p-4 mt-2">
+            <div class="container bg-light border p-4 mt-5">
                 <div class="form-group">
                     <label for="enunciado"><h4 class="text-primary">Enunciado</h4></label>
                     <input type="text" id="enunciado" class="form-control" placeholder="Introducir la pregunta">
@@ -160,23 +171,73 @@
                 </div>
             </div>
 
+            <div class="container bg-light border border-info p-4 mt-2">
+                <div class="form-group">
+                    <label for="solucion4"><h4 class="text-light bg-info">¡Propuesta de Solución!</h4></label>
+                    <textarea id="solucion4" rows="3" class="form-control" placeholder="Introducir la respuesta"></textarea>
+                </div>
+                <div class="row">
+                    <div class="custom-control custom-radio ml-3">
+                        <input type="radio" id="correcta4" name="tipoSolucion4" class="custom-control-input">
+                        <label for="correcta4" class="custom-control-label">Solución Correcta</label>
+                    </div>
+                    <div class="custom-control custom-radio ml-3">
+                        <input type="radio" id="incorrecta1" name="tipoSolucion1" class="custom-control-input">
+                        <label for="incorrecta1" class="custom-control-label">Solución Incorrecta</label>
+                    </div>
+                </div>
+                <div class="row mt-3 ml-1">
+                    <button class="btn btn-success"><i class="fas fa-check-circle mr-2"></i>Corregir Solución</button>
+                    <button class="btn btn-danger ml-3"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>
+                </div>
+            </div>
+
+            <div class="container bg-light border p-4 mt-2">
+                <div class="form-group">
+                    <label for="solucion5"><h4 class="text-primary">Solución 5</h4></label>
+                    <textarea id="solucion5" rows="3" class="form-control" placeholder="Introducir la respuesta"></textarea>
+                </div>
+                <div class="row">
+                    <div class="custom-control custom-radio ml-3">
+                        <input type="radio" id="correcta5" name="tipoSolucion5" class="custom-control-input">
+                        <label for="correcta5" class="custom-control-label">Solución Correcta</label>
+                    </div>
+                    <div class="custom-control custom-radio ml-3">
+                        <input type="radio" id="incorrecta2" name="tipoSolucion5" class="custom-control-input">
+                        <label for="incorrecta5" class="custom-control-label">Solución Incorrecta</label>
+                    </div>
+                </div>
+                <hr>
+                <div class="border border-info">
+                    <div class="form-group mt-3 ml-2">
+                        <label for="razonamiento1solucion5"><h5 class="text-light bg-info">¡¡¡Propuesta de Razonamiento!!!</h5></label>
+                        <textarea id="solucion5" rows="3" class="form-control" placeholder="Introducir el razonamiento a la respuesta"></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="custom-control custom-radio ml-4">
+                            <input type="radio" id="justificado1Solucion5" name="tipoRazonamiento1Solucion5" class="custom-control-input">
+                            <label for="justificado1Solucion5" class="custom-control-label">Razonamiento Justificado</label>
+                        </div>
+                        <div class="custom-control custom-radio ml-3">
+                            <input type="radio" id="noJustificado1Solucion5" name="tipoRazonamiento1Solucion5" class="custom-control-input">
+                            <label for="noJustificado1Solucion5" class="custom-control-label">Razonamiento Injustificado</label>
+                        </div>
+                    </div>
+                    <div class="row mt-3 ml-2">
+                        <button class="btn btn-success"><i class="fas fa-check-circle mr-2"></i>Corregir Razonamiento</button>
+                        <button class="btn btn-warning ml-3"><i class="fas fa-trash-alt mr-2"></i>Eliminar Razonamiento</button>
+                    </div>
+                </div>
+
+                <hr>
+                <div class="row mt-3 ml-1">
+                    <button class="btn btn-info"><i class="far fa-comment-alt mr-2"></i>Añadir Razonamiento</button>
+                    <button class="btn btn-danger ml-3"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>
+                </div>
+            </div>
+
 
         </form>
-
-
-
-        <div class="container mt-3">
-            <div class="row justify-content-end">
-                <button class="btn btn-danger"><i class="fa fa-times mr-2"></i>Cancelar</button>
-                <button class="btn btn-success ml-2"><i class="fa fa-save mr-2"></i>Guardar</button>
-
-            </div>
-        </div>
-
-
-
-
-
 
 
     </section>
