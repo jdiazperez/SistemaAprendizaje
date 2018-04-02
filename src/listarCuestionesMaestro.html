@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="utf-8">
+    <meta name="description" content="aprendizaje">
+    <meta name="keywords" content="aprendizaje">
+    <meta name="author" content="Jorge">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Sistema de Aprendizaje</title>
+</head>
+
+<body>
+
+    <header>
+        <nav id="navbar" class="navbar navbar-expand-sm navbar-dark bg-primary fixed-top pt-3">
+            <div class="container">
+                <a href="#" class="navbar-brand h1">Sistema de Aprendizaje</a>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link">Maestro: a</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Cerrar Sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <button class="btn btn-primary"><i class="far fa-file-alt fa-lg mr-3"></i>Nueva Cuestión</button>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="containerCuestiones" class="container mt-3">
+
+            <div class="row bg-light py-2 align-items-center">
+                <div class="col-sm">
+                    <a href="#" class="h6 text-primary ml-2">Cuestión 1</a> </div>
+                <div class="col-sm-2">
+                    <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalEliminar"><i class="fas fa-trash-alt fa-sm mr-1"></i>Eliminar</button>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="modal" id="modalEliminar">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body text-center my-3">¿Está seguro de que desea eliminar esta cuestión?</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary px-3">Si</button>
+                        <button class="btn btn-secondary" data-dismiss="modal">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+    </section>
+
+
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+
+
+
+</body>
+
+</html>
