@@ -31,7 +31,7 @@
                     <h1 class="text-center">Iniciar Sesión</h1>
                 </div>
             </div>
-            <form action="">
+            <form onsubmit="return validar()">
                 <div class="row justify-content-center">
                     <div class="col-lg-8 bg-light">
                         <div class="row justify-content-center">
@@ -58,12 +58,13 @@
 
                     </div>
                 </div>
+                
                 <div class="row justify-content-center">
                     <div class="col-lg-8 bg-light">
                         <div class="row my-5">
                             <div class="col-8"></div>
                             <div class="col">
-                                <button class="btn btn-lg btn-primary">Entrar</button>
+                                <input type="submit" class="btn btn-lg btn-primary" value="Entrar">
                             </div>
                         </div>
 
@@ -74,9 +75,10 @@
         </div>
     </section>
 
-    <script src="js/bootstrap.min.js"></script>
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/identificacion.js"></script>
 
 </body>
 
