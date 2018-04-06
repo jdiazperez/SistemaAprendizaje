@@ -1,52 +1,36 @@
-var usuarios = [
-    {
-        usuario: "m",
-        contrasenia: "m",
-        rol: "maestro"
-	},
-    {
-        usuario: "a",
-        contrasenia: "a",
-        rol: "aprendiz"
-	},
-    {
-        usuario: "b",
-        contrasenia: "b",
-        rol: "aprendiz"
-	},
-    {
-        usuario: "c",
-        contrasenia: "c",
-        rol: "aprendiz"
-	}
-];
 
-localStorage.setItem("usuarios", JSON.stringify(usuarios));
+function validacion(){
+    var datos = JSON.parse(window.localStorage.getItem("datos"));
+    var nombre = document.querySelector("#usuario").value;
+    var contraseña = document.querySelector("#contraseña").value;
+    
+    var usuario = getUsuario(datos, nombre, contraseña);
+    console.log(usuario);
 
-function validar() {
-    var usuarioForm = document.querySelector("#usuario").value;
-    var contraseniaForm = document.querySelector("#contrasenia").value;
-    var encontrado = false;
-    var i = 0;
-    while (!encontrado) {
-        if (usuarios[i].usuario === usuarioForm && usuarios[i].contrasenia === contraseniaForm) {
-            encontrado = true;
+    if (usuario == null){        
+        nombre.value = "";
+        contraseña.value = "";
+        login.action = "index.html";
+    } else {        
+        localStorage.setItem("usuarioIdentificado", JSON.stringify(usuario));
+        var login = document.querySelector("form");
+        if (usuario.tipo == "maestro"){
+            login.action = "listarCuestionesMaestro.html";
         } else {
-            i++;
+            login.action = "listarCuestionesAprendiz.html";
+        }
+        
+    }
+    
+    return usuario != null;
+}
+
+function getUsuario(datos, nombre, contraseña){
+    for(usuario of datos.usuarios){
+        if (usuario.nombre == nombre &&
+           usuario.contraseña == contraseña){
+            return usuario;
         }
     }
-    if (encontrado) {
-        var form = document.querySelector("form");
-        if (usuarios[i].rol === "maestro") {
-            form.action = "listarCuestionesMaestro.html";
-        } else {
-            form.action = "listarCuestionesAprendiz.html";
-        }
-    }/* else {
-        var alertAccesoDenegado = document.createElement("div");
-        alertAccesoDenegado.className = "alert alert-danger";
-        alertAccesoDenegado.textContent = "Error";        document.querySelector(".container").appendChild(alertAccesoDenegado);
-    }*/
-
-    return encontrado;
+    return null;
 }
