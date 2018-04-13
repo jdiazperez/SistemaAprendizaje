@@ -55,7 +55,7 @@ function cargar() {
                         },
                     { //solucion
                         id: 2,
-                        respuesta: "El software es la información que el desarrollador suministra al hardware para posteriormente manupilar la información del usuario",
+                        respuesta: "El software es la información que el desarrollador suministra al hardware para posteriormente manipular la información del usuario",
                         correcta: true,
                         propuestaPorAlumno: false
                         },

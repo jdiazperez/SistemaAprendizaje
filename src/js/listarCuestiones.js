@@ -1,11 +1,5 @@
 var datos;
 
-function actualizarUsuarioIdentificado() {
-    var navLinkUsuario = document.querySelector("#usuarioIdentificado");
-    var usuarioIdentificado = JSON.parse(localStorage.getItem("usuarioIdentificado"));
-    navLinkUsuario.textContent = usuarioIdentificado.tipo + ": " + usuarioIdentificado.nombre;
-}
-
 function listarCuestiones() {
     datos = JSON.parse(localStorage.getItem("datos"));
     var containerCuestiones = document.querySelector("#containerCuestiones");
