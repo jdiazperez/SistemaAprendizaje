@@ -42,22 +42,18 @@ function rellenarCampos(containerEnunciado) {
         var soluciones = cuestion.soluciones;
 
         for (var i = 0; i < soluciones.length; i++) {
-            if (soluciones[i].propuestaPorAlumno) {
-                rellenarSolucion(true, soluciones[i], i);
-            } else {
-                rellenarSolucion(false, soluciones[i], i);
-            }
+            rellenarSolucion(soluciones[i], i);
         }
     }
 }
 
-function rellenarSolucion(propuestaPorAlumno, solucion, i) {
+function rellenarSolucion(solucion, i) {
     var containerSolucion;
     var titulo;
     var claseTitulo;
     var claseContainerSolucion;
 
-    if (propuestaPorAlumno) {
+    if (solucion.propuestaPorAlumno) {
         claseContainerSolucion = "container bg-light border border-info p-4 mt-2";
         titulo = "¡¡¡Propuesta de Solución!!!";
         claseTitulo = "text-light bg-info";
@@ -92,12 +88,8 @@ function rellenarSolucion(propuestaPorAlumno, solucion, i) {
             containerSolucion.querySelector("#incorrecta" + (i + 1)).checked = true;
 
             for (var j = 0; j < solucion.razonamientos.length; j++) {
-
-                if (solucion.razonamientos[j].propuestoPorAlumno) {
-                    rellenarRazonamiento(true, containerSolucion, solucion.razonamientos[j], i, j);
-                } else {
-                    rellenarRazonamiento(false, containerSolucion, solucion.razonamientos[j], i, j);
-                }
+                
+                rellenarRazonamiento(containerSolucion, solucion.razonamientos[j], i, j);
             }
 
             containerSolucion.appendChild(document.createElement("hr"));
@@ -137,13 +129,13 @@ function crearContainerSolucion(solucion, claseContainerSolucion, titulo, claseT
     return containerSolucion;
 }
 
-function rellenarRazonamiento(propuestoPorAlumno, containerSolucion, razonamiento, i, j) {
+function rellenarRazonamiento(containerSolucion, razonamiento, i, j) {
     var divRazonamiento;
     var claseDivRazonamiento;
     var titulo;
     var claseTitulo;
 
-    if (propuestoPorAlumno) {
+    if (razonamiento.propuestoPorAlumno) {
         claseDivRazonamiento = "border border-info";
         titulo = "¡¡¡Propuesta de Razonamiento!!!";
         claseTitulo = "text-light bg-info";
@@ -161,13 +153,13 @@ function rellenarRazonamiento(propuestoPorAlumno, containerSolucion, razonamient
         titulo = "Razonamiento " + (j + 1);
         claseTitulo = "text-info";
         divRazonamiento = crearDivRazonamiento(razonamiento, claseDivRazonamiento, titulo, claseTitulo, i, j);
-        
+
         if (razonamiento.justificado) {
             divRazonamiento.querySelector("#justificado" + (j + 1) + "Solucion" + (i + 1)).checked = true;
 
         } else {
             divRazonamiento.querySelector("#injustificado" + (j + 1) + "Solucion" + (i + 1)).checked = true;
-            
+
             var divError = document.createElement("div");
             divError.innerHTML =
                 '<div class="form-group mt-3 ml-2">' +
@@ -198,7 +190,7 @@ function crearDivRazonamiento(razonamiento, claseDivRazonamiento, titulo, claseT
     divRazonamiento.innerHTML =
         '<div class="form-group mt-3 ml-2">' +
         '<label for="razonamiento' + (j + 1) + 'solucion' + (i + 1) + '"><h5 class="' + claseTitulo + '">' + titulo + '</h5></label>' +
-        '<textarea id="solucion' + (i + 1) + '" rows="3" class="form-control" placeholder="Introducir el razonamiento a la respuesta">' +
+        '<textarea id="razonamiento' + (j + 1) + 'solucion' + (i + 1) + '" rows="3" class="form-control" placeholder="Introducir el razonamiento a la respuesta">' +
         razonamiento.texto +
         '</textarea>' +
         '</div>' +
