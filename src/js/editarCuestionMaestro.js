@@ -61,13 +61,21 @@ function rellenarSolucion(propuestaPorAlumno, solucion, i) {
         claseContainerSolucion = "container bg-light border border-info p-4 mt-2";
         titulo = "¡¡¡Propuesta de Solución!!!";
         claseTitulo = "text-light bg-info";
-        containerSolucion = crearContainerSolucion(solucion, claseContainerSolucion, claseTitulo, titulo, i);
+        containerSolucion = crearContainerSolucion(solucion, claseContainerSolucion, titulo, claseTitulo, i);
         sectionCuestion.appendChild(containerSolucion);
+
+        var divOpcionesSolucion = document.createElement("div");
+        divOpcionesSolucion.innerHTML =
+            '<div class="row mt-3 ml-1">' +
+            '<button class="btn btn-success"><i class="fas fa-check-circle mr-2"></i>Corregir Solución</button>' +
+            '<button class="btn btn-danger ml-3"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
+            '</div>';
+        containerSolucion.appendChild(divOpcionesSolucion);
     } else {
         claseContainerSolucion = "container bg-light border p-4 mt-2";
-        titulo = "Solución" + (i + 1);
+        titulo = "Solución " + (i + 1);
         claseTitulo = "text-primary";
-        containerSolucion = crearContainerSolucion(solucion, claseContainerSolucion, claseTitulo, titulo, i);
+        containerSolucion = crearContainerSolucion(solucion, claseContainerSolucion, titulo, claseTitulo, i);
         sectionCuestion.appendChild(containerSolucion);
 
         if (solucion.correcta) {
@@ -85,31 +93,11 @@ function rellenarSolucion(propuestaPorAlumno, solucion, i) {
 
             for (var j = 0; j < solucion.razonamientos.length; j++) {
 
-                crearDivRazonamiento(containerSolucion, i, j, solucion.razonamientos[j]);
-
-                if (solucion.razonamientos[j].justificado) {
-                    document.querySelector("#justificado" + (j + 1) + "Solucion" + (i + 1)).checked = true;
-
+                if (solucion.razonamientos[j].propuestoPorAlumno) {
+                    rellenarRazonamiento(true, containerSolucion, solucion.razonamientos[j], i, j);
                 } else {
-                    document.querySelector("#injustificado" + (j + 1) + "Solucion" + (i + 1)).checked = true;
-
-                    var divError = document.createElement("div");
-                    divError.innerHTML =
-                        '<div class="form-group mt-3 ml-2">' +
-                        '<label for="error' + (j + 1) + 'Solucion' + (i + 1) + '"><h6 class="text-danger">Error</h6></label>' +
-                        '<textarea id="error' + (j + 1) + 'Solucion' + (i + 1) + '" rows="3" class="form-control">' +
-                        solucion.razonamientos[j].error +
-                        '</textarea>' +
-                        '</div>';
-                    containerSolucion.appendChild(divError);
+                    rellenarRazonamiento(false, containerSolucion, solucion.razonamientos[j], i, j);
                 }
-
-                var divEliminarRazonamiento = document.createElement("div");
-                divEliminarRazonamiento.innerHTML =
-                    '<div class="row mt-3 ml-2">' +
-                    '<button class="btn btn-warning"><i class="fas fa-trash-alt mr-2"></i>Eliminar Razonamiento</button>' +
-                    '</div>';
-                containerSolucion.appendChild(divEliminarRazonamiento);
             }
 
             containerSolucion.appendChild(document.createElement("hr"));
@@ -126,12 +114,12 @@ function rellenarSolucion(propuestaPorAlumno, solucion, i) {
     }
 }
 
-function crearContainerSolucion(solucion, claseContainerSolucion, claseTitulo, titulo, i) {
+function crearContainerSolucion(solucion, claseContainerSolucion, titulo, claseTitulo, i) {
     var containerSolucion = document.createElement("div");
     containerSolucion.className = claseContainerSolucion;
     containerSolucion.innerHTML =
         '<div class="form-group">' +
-        '<label id="labelSolucion' + (i + 1) + '" for="solucion' + (i + 1) + '"><h4 class="' + claseTitulo + '">' + titulo + '</h4></label>' +
+        '<label for="solucion' + (i + 1) + '"><h4 class="' + claseTitulo + '">' + titulo + '</h4></label>' +
         '<textarea id="solucion' + (i + 1) + '" rows="3" class="form-control">' +
         solucion.respuesta +
         '</textarea>' +
@@ -149,22 +137,72 @@ function crearContainerSolucion(solucion, claseContainerSolucion, claseTitulo, t
     return containerSolucion;
 }
 
-function crearDivRazonamiento(containerSolucion, i, j, razonamiento) {
+function rellenarRazonamiento(propuestoPorAlumno, containerSolucion, razonamiento, i, j) {
+    var divRazonamiento;
+    var claseDivRazonamiento;
+    var titulo;
+    var claseTitulo;
+
+    if (propuestoPorAlumno) {
+        claseDivRazonamiento = "border border-info";
+        titulo = "¡¡¡Propuesta de Razonamiento!!!";
+        claseTitulo = "text-light bg-info";
+        divRazonamiento = crearDivRazonamiento(razonamiento, claseDivRazonamiento, titulo, claseTitulo, i, j);
+
+        var divOpcionesRazonamiento = document.createElement("div");
+        divOpcionesRazonamiento.className = "row mt-3 ml-2";
+        divOpcionesRazonamiento.innerHTML =
+            '<button class="btn btn-success"><i class="fas fa-check-circle mr-2"></i>Corregir Razonamiento</button>' +
+            '<button class="btn btn-warning ml-3"><i class="fas fa-trash-alt mr-2"></i>Eliminar Razonamiento</button>';
+        divRazonamiento.appendChild(divOpcionesRazonamiento);
+
+    } else {
+        claseDivRazonamiento = "";
+        titulo = "Razonamiento " + (j + 1);
+        claseTitulo = "text-info";
+        divRazonamiento = crearDivRazonamiento(razonamiento, claseDivRazonamiento, titulo, claseTitulo, i, j);
+        
+        if (razonamiento.justificado) {
+            divRazonamiento.querySelector("#justificado" + (j + 1) + "Solucion" + (i + 1)).checked = true;
+
+        } else {
+            divRazonamiento.querySelector("#injustificado" + (j + 1) + "Solucion" + (i + 1)).checked = true;
+            
+            var divError = document.createElement("div");
+            divError.innerHTML =
+                '<div class="form-group mt-3 ml-2">' +
+                '<label for="error' + (j + 1) + 'Solucion' + (i + 1) + '"><h6 class="text-danger">Error</h6></label>' +
+                '<textarea id="error' + (j + 1) + 'Solucion' + (i + 1) + '" rows="3" class="form-control">' +
+                razonamiento.error +
+                '</textarea>' +
+                '</div>';
+            divRazonamiento.appendChild(divError);
+        }
+
+        var divEliminarRazonamiento = document.createElement("div");
+        divEliminarRazonamiento.innerHTML =
+            '<div class="row mt-3 ml-2">' +
+            '<button class="btn btn-warning"><i class="fas fa-trash-alt mr-2"></i>Eliminar Razonamiento</button>' +
+            '</div>';
+        divRazonamiento.appendChild(divEliminarRazonamiento);
+
+    }
     containerSolucion.appendChild(document.createElement("hr"));
+    containerSolucion.appendChild(divRazonamiento);
+}
+
+function crearDivRazonamiento(razonamiento, claseDivRazonamiento, titulo, claseTitulo, i, j) {
 
     var divRazonamiento = document.createElement("div");
-    divRazonamiento.className = "form-group mt-3 ml-2";
+    divRazonamiento.className = claseDivRazonamiento;
     divRazonamiento.innerHTML =
-        '<label for="razonamiento' + (j + 1) + 'solucion' + (i + 1) + '"><h5 class="text-info">Razonamiento ' + (j + 1) + '</h5></label>' +
-        '<textarea id="razonamiento' + (j + 1) + 'solucion' + (i + 1) + '" rows="3" class="form-control">' +
+        '<div class="form-group mt-3 ml-2">' +
+        '<label for="razonamiento' + (j + 1) + 'solucion' + (i + 1) + '"><h5 class="' + claseTitulo + '">' + titulo + '</h5></label>' +
+        '<textarea id="solucion' + (i + 1) + '" rows="3" class="form-control" placeholder="Introducir el razonamiento a la respuesta">' +
         razonamiento.texto +
-        '</textarea>';
-    containerSolucion.appendChild(divRazonamiento);
-
-
-    var divJustificado = document.createElement("div");
-    divJustificado.className = "row";
-    divJustificado.innerHTML =
+        '</textarea>' +
+        '</div>' +
+        '<div class="row">' +
         '<div class="custom-control custom-radio ml-4">' +
         '<input type="radio" id="justificado' + (j + 1) + 'Solucion' + (i + 1) + '" name="tipoRazonamiento' + (j + 1) + 'Solucion' + (i + 1) + '" class="custom-control-input">' +
         '<label for="justificado' + (j + 1) + 'Solucion' + (i + 1) + '" class="custom-control-label">Razonamiento Justificado</label>' +
@@ -172,7 +210,10 @@ function crearDivRazonamiento(containerSolucion, i, j, razonamiento) {
         '<div class="custom-control custom-radio ml-3">' +
         '<input type="radio" id="injustificado' + (j + 1) + 'Solucion' + (i + 1) + '" name="tipoRazonamiento' + (j + 1) + 'Solucion' + (i + 1) + '" class="custom-control-input">' +
         '<label for="injustificado' + (j + 1) + 'Solucion' + (i + 1) + '" class="custom-control-label">Razonamiento Injustificado</label>' +
+        '</div>' +
+        '</div>' +
         '</div>';
-    containerSolucion.appendChild(divJustificado);
+
+    return divRazonamiento;
 
 }

@@ -116,6 +116,31 @@ function cargar() {
 
                         }
                     ]
+                },
+            { // cuestion
+                id: 3,
+                enunciado: "¿Qué es la Programación Orientada a Objetos?",
+                disponible: true,
+                soluciones: [
+                    { //solucion
+                        id: 1,
+                        respuesta: "Es un paradigma de programación donde los objetos son entidades que tienen un determinado estado, comportamiento e identidad",
+                        correcta: false,
+                        propuestaPorAlumno: false,
+                        razonamientos: [
+                            { //razonamiento
+                                id: 1,
+                                texto: "Demasiado ambigüa",                               
+                                propuestoPorAlumno: true
+                                }
+                            ]
+                        },
+                    { //solucion
+                        id: 2,
+                        respuesta: "Es un paradigma de programación donde los objetos son abstracciones de entidades del mundo real",
+                        propuestaPorAlumno: true
+                        }
+                    ]
                 }
              ]
     }
