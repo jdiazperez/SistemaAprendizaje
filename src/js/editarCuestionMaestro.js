@@ -1,12 +1,14 @@
 var datos;
 var idCuestion;
 var cuestion;
+var numSoluciones;
 var sectionCuestion;
 
 function mostrarCuestion() {
     datos = JSON.parse(localStorage.getItem("datos"));
     idCuestion = localStorage.getItem("editarCuestion");
     cuestion = datos.cuestiones[idCuestion - 1];
+    numSoluciones = cuestion.soluciones.length;
 
     sectionCuestion = document.querySelector("#cuestion");
 
@@ -24,13 +26,37 @@ function mostrarCuestion() {
         "</div>" +
         "</div>" +
         "<div class='row mt-3 ml-1'>" +
-        "<button class='btn btn-primary'><i class='fa fa-comment mr-2'></i>Nueva Solución</button>" +
+        "<button class='btn btn-primary' onclick='nuevaSolucion()'><i class='fa fa-comment mr-2'></i>Nueva Solución</button>" +
         "</div>";
     sectionCuestion.appendChild(containerEnunciado);
 
     if (cuestion !== undefined) {
         rellenarCampos(containerEnunciado);
     }
+}
+
+function nuevaSolucion() {
+    var containerSolucion;
+    var titulo;
+    var claseTitulo;
+    var claseContainerSolucion;
+    var divEliminarSolucion;
+
+    claseContainerSolucion = "container bg-light border p-4 mt-2";
+    titulo = "Solución " + (numSoluciones + 1);
+    claseTitulo = "text-primary";
+    containerSolucion = crearContainerSolucion("", claseContainerSolucion, titulo, claseTitulo, numSoluciones);
+    numSoluciones++;
+    sectionCuestion.appendChild(containerSolucion);
+    
+    divEliminarSolucion = document.createElement("div");
+    divEliminarSolucion.innerHTML =
+        '<div class="row mt-3 ml-1">' +
+        '<button class="btn btn-danger"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
+        '</div>';
+    containerSolucion.appendChild(divEliminarSolucion);
+    containerSolucion.scrollIntoView();
+
 }
 
 function rellenarCampos(containerEnunciado) {
@@ -57,7 +83,7 @@ function rellenarSolucion(solucion, i) {
         claseContainerSolucion = "container bg-light border border-info p-4 mt-2";
         titulo = "¡¡¡Propuesta de Solución!!!";
         claseTitulo = "text-light bg-info";
-        containerSolucion = crearContainerSolucion(solucion, claseContainerSolucion, titulo, claseTitulo, i);
+        containerSolucion = crearContainerSolucion(solucion.respuesta, claseContainerSolucion, titulo, claseTitulo, i);
         sectionCuestion.appendChild(containerSolucion);
 
         var divOpcionesSolucion = document.createElement("div");
@@ -71,7 +97,7 @@ function rellenarSolucion(solucion, i) {
         claseContainerSolucion = "container bg-light border p-4 mt-2";
         titulo = "Solución " + (i + 1);
         claseTitulo = "text-primary";
-        containerSolucion = crearContainerSolucion(solucion, claseContainerSolucion, titulo, claseTitulo, i);
+        containerSolucion = crearContainerSolucion(solucion.respuesta, claseContainerSolucion, titulo, claseTitulo, i);
         sectionCuestion.appendChild(containerSolucion);
 
         if (solucion.correcta) {
@@ -88,7 +114,7 @@ function rellenarSolucion(solucion, i) {
             containerSolucion.querySelector("#incorrecta" + (i + 1)).checked = true;
 
             for (var j = 0; j < solucion.razonamientos.length; j++) {
-                
+
                 rellenarRazonamiento(containerSolucion, solucion.razonamientos[j], i, j);
             }
 
@@ -106,14 +132,15 @@ function rellenarSolucion(solucion, i) {
     }
 }
 
-function crearContainerSolucion(solucion, claseContainerSolucion, titulo, claseTitulo, i) {
+function crearContainerSolucion(respuesta, claseContainerSolucion, titulo, claseTitulo, i) {
     var containerSolucion = document.createElement("div");
+    containerSolucion.id = "solucion" + (i + 1);
     containerSolucion.className = claseContainerSolucion;
     containerSolucion.innerHTML =
         '<div class="form-group">' +
-        '<label for="solucion' + (i + 1) + '"><h4 class="' + claseTitulo + '">' + titulo + '</h4></label>' +
-        '<textarea id="solucion' + (i + 1) + '" rows="3" class="form-control">' +
-        solucion.respuesta +
+        '<label for="textSolucion' + (i + 1) + '"><h4 class="' + claseTitulo + '">' + titulo + '</h4></label>' +
+        '<textarea id="textSolucion' + (i + 1) + '" rows="3" class="form-control" placeholder="Introducir la respuesta">' +
+        respuesta +
         '</textarea>' +
         '</div>' +
         '<div class="row">' +
