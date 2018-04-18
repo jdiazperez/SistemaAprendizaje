@@ -45,18 +45,22 @@ function nuevaSolucion() {
     claseContainerSolucion = "container bg-light border p-4 mt-2";
     titulo = "Solución " + (numSoluciones + 1);
     claseTitulo = "text-primary";
-    containerSolucion = crearContainerSolucion("", claseContainerSolucion, titulo, claseTitulo, numSoluciones);
-    numSoluciones++;
+    containerSolucion = crearContainerSolucion("", claseContainerSolucion, titulo, claseTitulo, numSoluciones + 1);    
     sectionCuestion.appendChild(containerSolucion);
     
-    divEliminarSolucion = document.createElement("div");
+    divEliminarSolucion = document.createElement("div");    
     divEliminarSolucion.innerHTML =
         '<div class="row mt-3 ml-1">' +
-        '<button class="btn btn-danger"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
+        '<button class="btn btn-danger" onclick="eliminar(solucion' + (numSoluciones + 1) + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
         '</div>';
     containerSolucion.appendChild(divEliminarSolucion);
+    numSoluciones++;
     containerSolucion.scrollIntoView();
 
+}
+
+function eliminar(elem){    
+    elem.parentNode.removeChild(elem);
 }
 
 function rellenarCampos(containerEnunciado) {
@@ -67,8 +71,8 @@ function rellenarCampos(containerEnunciado) {
     if (cuestion.hasOwnProperty("soluciones")) {
         var soluciones = cuestion.soluciones;
 
-        for (var i = 0; i < soluciones.length; i++) {
-            rellenarSolucion(soluciones[i], i);
+        for (var i = 1; i <= soluciones.length; i++) {
+            rellenarSolucion(soluciones[i - 1], i);
         }
     }
 }
@@ -95,13 +99,13 @@ function rellenarSolucion(solucion, i) {
         containerSolucion.appendChild(divOpcionesSolucion);
     } else {
         claseContainerSolucion = "container bg-light border p-4 mt-2";
-        titulo = "Solución " + (i + 1);
+        titulo = "Solución " + i;
         claseTitulo = "text-primary";
         containerSolucion = crearContainerSolucion(solucion.respuesta, claseContainerSolucion, titulo, claseTitulo, i);
         sectionCuestion.appendChild(containerSolucion);
 
         if (solucion.correcta) {
-            containerSolucion.querySelector("#correcta" + (i + 1)).checked = true;
+            containerSolucion.querySelector("#correcta" + i).checked = true;
 
             var divEliminarSolucion = document.createElement("div");
             divEliminarSolucion.innerHTML =
@@ -111,11 +115,11 @@ function rellenarSolucion(solucion, i) {
             containerSolucion.appendChild(divEliminarSolucion);
 
         } else {
-            containerSolucion.querySelector("#incorrecta" + (i + 1)).checked = true;
+            containerSolucion.querySelector("#incorrecta" + i).checked = true;
 
-            for (var j = 0; j < solucion.razonamientos.length; j++) {
+            for (var j = 1; j <= solucion.razonamientos.length; j++) {
 
-                rellenarRazonamiento(containerSolucion, solucion.razonamientos[j], i, j);
+                rellenarRazonamiento(containerSolucion, solucion.razonamientos[j - 1], i, j);
             }
 
             containerSolucion.appendChild(document.createElement("hr"));
@@ -134,23 +138,23 @@ function rellenarSolucion(solucion, i) {
 
 function crearContainerSolucion(respuesta, claseContainerSolucion, titulo, claseTitulo, i) {
     var containerSolucion = document.createElement("div");
-    containerSolucion.id = "solucion" + (i + 1);
+    containerSolucion.id = "solucion" + i;
     containerSolucion.className = claseContainerSolucion;
     containerSolucion.innerHTML =
         '<div class="form-group">' +
-        '<label for="textSolucion' + (i + 1) + '"><h4 class="' + claseTitulo + '">' + titulo + '</h4></label>' +
-        '<textarea id="textSolucion' + (i + 1) + '" rows="3" class="form-control" placeholder="Introducir la respuesta">' +
+        '<label for="textSolucion' + i + '"><h4 class="' + claseTitulo + '">' + titulo + '</h4></label>' +
+        '<textarea id="textSolucion' + i + '" rows="3" class="form-control" placeholder="Introducir la respuesta">' +
         respuesta +
         '</textarea>' +
         '</div>' +
         '<div class="row">' +
         '<div class="custom-control custom-radio ml-3">' +
-        '<input type="radio" id="correcta' + (i + 1) + '" name="tipoSolucion' + (i + 1) + '" class="custom-control-input">' +
-        '<label for="correcta' + (i + 1) + '" class="custom-control-label">Solución Correcta</label>' +
+        '<input type="radio" id="correcta' + i + '" name="tipoSolucion' + i + '" class="custom-control-input">' +
+        '<label for="correcta' + i + '" class="custom-control-label">Solución Correcta</label>' +
         '</div>' +
         '<div class="custom-control custom-radio ml-3">' +
-        '<input type="radio" id="incorrecta' + (i + 1) + '" name="tipoSolucion' + (i + 1) + '" class="custom-control-input">' +
-        '<label for="incorrecta' + (i + 1) + '" class="custom-control-label">Solución Incorrecta</label>' +
+        '<input type="radio" id="incorrecta' + i + '" name="tipoSolucion' + i + '" class="custom-control-input">' +
+        '<label for="incorrecta' + i + '" class="custom-control-label">Solución Incorrecta</label>' +
         '</div>' +
         '</div>';
     return containerSolucion;
@@ -177,21 +181,21 @@ function rellenarRazonamiento(containerSolucion, razonamiento, i, j) {
 
     } else {
         claseDivRazonamiento = "";
-        titulo = "Razonamiento " + (j + 1);
+        titulo = "Razonamiento " + j;
         claseTitulo = "text-info";
         divRazonamiento = crearDivRazonamiento(razonamiento, claseDivRazonamiento, titulo, claseTitulo, i, j);
 
         if (razonamiento.justificado) {
-            divRazonamiento.querySelector("#justificado" + (j + 1) + "Solucion" + (i + 1)).checked = true;
+            divRazonamiento.querySelector("#justificado" + j + "Solucion" + i).checked = true;
 
         } else {
-            divRazonamiento.querySelector("#injustificado" + (j + 1) + "Solucion" + (i + 1)).checked = true;
+            divRazonamiento.querySelector("#injustificado" + j + "Solucion" + i).checked = true;
 
             var divError = document.createElement("div");
             divError.innerHTML =
                 '<div class="form-group mt-3 ml-2">' +
-                '<label for="error' + (j + 1) + 'Solucion' + (i + 1) + '"><h6 class="text-danger">Error</h6></label>' +
-                '<textarea id="error' + (j + 1) + 'Solucion' + (i + 1) + '" rows="3" class="form-control">' +
+                '<label for="error' + j + 'Solucion' + i + '"><h6 class="text-danger">Error</h6></label>' +
+                '<textarea id="error' + j + 'Solucion' + i + '" rows="3" class="form-control">' +
                 razonamiento.error +
                 '</textarea>' +
                 '</div>';
@@ -216,19 +220,19 @@ function crearDivRazonamiento(razonamiento, claseDivRazonamiento, titulo, claseT
     divRazonamiento.className = claseDivRazonamiento;
     divRazonamiento.innerHTML =
         '<div class="form-group mt-3 ml-2">' +
-        '<label for="razonamiento' + (j + 1) + 'solucion' + (i + 1) + '"><h5 class="' + claseTitulo + '">' + titulo + '</h5></label>' +
-        '<textarea id="razonamiento' + (j + 1) + 'solucion' + (i + 1) + '" rows="3" class="form-control" placeholder="Introducir el razonamiento a la respuesta">' +
+        '<label for="razonamiento' + j + 'solucion' + i + '"><h5 class="' + claseTitulo + '">' + titulo + '</h5></label>' +
+        '<textarea id="razonamiento' + j + 'solucion' + i + '" rows="3" class="form-control" placeholder="Introducir el razonamiento a la respuesta">' +
         razonamiento.texto +
         '</textarea>' +
         '</div>' +
         '<div class="row">' +
         '<div class="custom-control custom-radio ml-4">' +
-        '<input type="radio" id="justificado' + (j + 1) + 'Solucion' + (i + 1) + '" name="tipoRazonamiento' + (j + 1) + 'Solucion' + (i + 1) + '" class="custom-control-input">' +
-        '<label for="justificado' + (j + 1) + 'Solucion' + (i + 1) + '" class="custom-control-label">Razonamiento Justificado</label>' +
+        '<input type="radio" id="justificado' + j + 'Solucion' + i + '" name="tipoRazonamiento' + j + 'Solucion' + i + '" class="custom-control-input">' +
+        '<label for="justificado' + j + 'Solucion' + i + '" class="custom-control-label">Razonamiento Justificado</label>' +
         '</div>' +
         '<div class="custom-control custom-radio ml-3">' +
-        '<input type="radio" id="injustificado' + (j + 1) + 'Solucion' + (i + 1) + '" name="tipoRazonamiento' + (j + 1) + 'Solucion' + (i + 1) + '" class="custom-control-input">' +
-        '<label for="injustificado' + (j + 1) + 'Solucion' + (i + 1) + '" class="custom-control-label">Razonamiento Injustificado</label>' +
+        '<input type="radio" id="injustificado' + j + 'Solucion' + i + '" name="tipoRazonamiento' + j + 'Solucion' + i + '" class="custom-control-input">' +
+        '<label for="injustificado' + j + 'Solucion' + i + '" class="custom-control-label">Razonamiento Injustificado</label>' +
         '</div>' +
         '</div>' +
         '</div>';
