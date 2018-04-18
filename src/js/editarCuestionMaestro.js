@@ -35,34 +35,6 @@ function mostrarCuestion() {
     }
 }
 
-function nuevaSolucion() {
-    var containerSolucion;
-    var titulo;
-    var claseTitulo;
-    var claseContainerSolucion;
-    var divEliminarSolucion;
-
-    claseContainerSolucion = "container bg-light border p-4 mt-2";
-    titulo = "Solución " + (numSoluciones + 1);
-    claseTitulo = "text-primary";
-    containerSolucion = crearContainerSolucion("", claseContainerSolucion, titulo, claseTitulo, numSoluciones + 1);
-    sectionCuestion.appendChild(containerSolucion);
-
-    divEliminarSolucion = document.createElement("div");
-    divEliminarSolucion.innerHTML =
-        '<div class="row mt-3 ml-1">' +
-        '<button class="btn btn-danger" onclick="eliminar(solucion' + (numSoluciones + 1) + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
-        '</div>';
-    containerSolucion.appendChild(divEliminarSolucion);
-    numSoluciones++;
-    containerSolucion.scrollIntoView();
-
-}
-
-function eliminar(elem) {
-    elem.parentNode.removeChild(elem);
-}
-
 function rellenarCampos(containerEnunciado) {
     containerEnunciado.querySelector("#enunciado").value = cuestion.enunciado;
     if (cuestion.disponible) {
@@ -110,7 +82,7 @@ function rellenarSolucion(solucion, i) {
             var divEliminarSolucion = document.createElement("div");
             divEliminarSolucion.innerHTML =
                 '<div class="row mt-3 ml-1">' +
-                '<button class="btn btn-danger"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
+                '<button class="btn btn-danger" onclick="eliminar(solucion' + i + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
                 '</div>';
             containerSolucion.appendChild(divEliminarSolucion);
 
@@ -124,12 +96,7 @@ function rellenarSolucion(solucion, i) {
 
             containerSolucion.appendChild(document.createElement("hr"));
 
-            var divOpcionesSolucion = document.createElement("div");
-            divOpcionesSolucion.innerHTML =
-                '<div class="row mt-3 ml-1">' +
-                '<button class="btn btn-info"><i class="far fa-comment-alt mr-2"></i>Añadir Razonamiento</button>' +
-                '<button class="btn btn-danger ml-3"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
-                '</div>';
+            var divOpcionesSolucion = crearDivOpcionesSolucion(i, j);
             containerSolucion.appendChild(divOpcionesSolucion);
 
         }
@@ -160,24 +127,6 @@ function crearContainerSolucion(respuesta, claseContainerSolucion, titulo, clase
     return containerSolucion;
 }
 
-function corregirSolucion(i) {
-    var solucion = cuestion.soluciones[i - 1];
-    var containerSolucion = document.querySelector("#solucion" + i);
-
-    solucion.propuestaPorAlumno = false;
-
-    if (document.querySelector("#correcta" + i).checked == true) {
-        solucion.correcta = true;
-    } else {
-        solucion.correcta = false;
-        solucion.razonamientos = [];
-    }
-    eliminar(containerSolucion);
-    rellenarSolucion(solucion, i);
-    document.querySelector("#solucion" + i).scrollIntoView();
-
-}
-
 function rellenarRazonamiento(containerSolucion, razonamiento, i, j) {
     var divRazonamiento;
     var claseDivRazonamiento;
@@ -188,7 +137,7 @@ function rellenarRazonamiento(containerSolucion, razonamiento, i, j) {
         claseDivRazonamiento = "border border-info";
         titulo = "¡¡¡Propuesta de Razonamiento!!!";
         claseTitulo = "text-light bg-info";
-        divRazonamiento = crearDivRazonamiento(razonamiento, claseDivRazonamiento, titulo, claseTitulo, i, j);
+        divRazonamiento = crearDivRazonamiento(razonamiento.texto, claseDivRazonamiento, titulo, claseTitulo, i, j);
 
         var divOpcionesRazonamiento = document.createElement("div");
         divOpcionesRazonamiento.className = "row mt-3 ml-2";
@@ -201,7 +150,7 @@ function rellenarRazonamiento(containerSolucion, razonamiento, i, j) {
         claseDivRazonamiento = "";
         titulo = "Razonamiento " + j;
         claseTitulo = "text-info";
-        divRazonamiento = crearDivRazonamiento(razonamiento, claseDivRazonamiento, titulo, claseTitulo, i, j);
+        divRazonamiento = crearDivRazonamiento(razonamiento.texto, claseDivRazonamiento, titulo, claseTitulo, i, j);
 
         if (razonamiento.justificado) {
             divRazonamiento.querySelector("#justificado" + j + "Solucion" + i).checked = true;
@@ -232,7 +181,7 @@ function rellenarRazonamiento(containerSolucion, razonamiento, i, j) {
     containerSolucion.appendChild(divRazonamiento);
 }
 
-function crearDivRazonamiento(razonamiento, claseDivRazonamiento, titulo, claseTitulo, i, j) {
+function crearDivRazonamiento(textoRazonamiento, claseDivRazonamiento, titulo, claseTitulo, i, j) {
 
     var divRazonamiento = document.createElement("div");
     divRazonamiento.className = claseDivRazonamiento;
@@ -240,7 +189,7 @@ function crearDivRazonamiento(razonamiento, claseDivRazonamiento, titulo, claseT
         '<div class="form-group mt-3 ml-2">' +
         '<label for="razonamiento' + j + 'solucion' + i + '"><h5 class="' + claseTitulo + '">' + titulo + '</h5></label>' +
         '<textarea id="razonamiento' + j + 'solucion' + i + '" rows="3" class="form-control" placeholder="Introducir el razonamiento a la respuesta">' +
-        razonamiento.texto +
+        textoRazonamiento +
         '</textarea>' +
         '</div>' +
         '<div class="row">' +
@@ -257,4 +206,81 @@ function crearDivRazonamiento(razonamiento, claseDivRazonamiento, titulo, claseT
 
     return divRazonamiento;
 
+}
+
+function crearDivOpcionesSolucion(i, j) {
+    var divOpcionesSolucion = document.createElement("div");
+    divOpcionesSolucion.id = "opciones" + i;
+    divOpcionesSolucion.innerHTML =
+        '<div class="row mt-3 ml-1">' +
+        '<button class="btn btn-info" onclick="añadirRazonamiento(' + i + ', ' + j + ')"><i class="far fa-comment-alt mr-2"></i>Añadir Razonamiento</button>' +
+        '<button class="btn btn-danger ml-3" onclick="eliminar(solucion' + i + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
+        '</div>';
+    return divOpcionesSolucion;
+}
+
+function nuevaSolucion() {
+    var containerSolucion;
+    var titulo;
+    var claseTitulo;
+    var claseContainerSolucion;
+    var divEliminarSolucion;
+
+    claseContainerSolucion = "container bg-light border p-4 mt-2";
+    titulo = "Solución " + (numSoluciones + 1);
+    claseTitulo = "text-primary";
+    containerSolucion = crearContainerSolucion("", claseContainerSolucion, titulo, claseTitulo, numSoluciones + 1);
+    sectionCuestion.appendChild(containerSolucion);
+
+    divEliminarSolucion = document.createElement("div");
+    divEliminarSolucion.innerHTML =
+        '<div class="row mt-3 ml-1">' +
+        '<button class="btn btn-danger" onclick="eliminar(solucion' + (numSoluciones + 1) + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
+        '</div>';
+    containerSolucion.appendChild(divEliminarSolucion);
+    numSoluciones++;
+    containerSolucion.scrollIntoView();
+
+}
+
+function eliminar(elem) {
+    elem.parentNode.removeChild(elem);
+}
+
+function corregirSolucion(i) {
+    var solucion = cuestion.soluciones[i - 1];
+    var containerSolucion = document.querySelector("#solucion" + i);
+
+    solucion.propuestaPorAlumno = false;
+
+    if (document.querySelector("#correcta" + i).checked == true) {
+        solucion.correcta = true;
+    } else {
+        solucion.correcta = false;
+        solucion.razonamientos = [];
+    }
+    eliminar(containerSolucion);
+    rellenarSolucion(solucion, i);
+    document.querySelector("#solucion" + i).scrollIntoView();
+
+}
+
+function añadirRazonamiento(i, j) {
+    
+    var claseDivRazonamiento = "";
+    var titulo = "Razonamiento " + j;
+    var claseTitulo = "text-info";
+    var divRazonamiento = crearDivRazonamiento("", claseDivRazonamiento, titulo, claseTitulo, i, j);
+    j++;
+
+    var divOpcionesSolucion = document.querySelector("#opciones" + i);
+    eliminar(divOpcionesSolucion);
+
+    var containerSolucion = document.querySelector("#solucion" + i);
+    
+    containerSolucion.appendChild(divRazonamiento);
+    containerSolucion.appendChild(document.createElement("hr"));
+
+    divOpcionesSolucion = crearDivOpcionesSolucion(i, j);
+    containerSolucion.appendChild(divOpcionesSolucion);
 }
