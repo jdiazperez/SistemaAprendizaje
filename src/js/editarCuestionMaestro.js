@@ -45,10 +45,10 @@ function nuevaSolucion() {
     claseContainerSolucion = "container bg-light border p-4 mt-2";
     titulo = "Solución " + (numSoluciones + 1);
     claseTitulo = "text-primary";
-    containerSolucion = crearContainerSolucion("", claseContainerSolucion, titulo, claseTitulo, numSoluciones + 1);    
+    containerSolucion = crearContainerSolucion("", claseContainerSolucion, titulo, claseTitulo, numSoluciones + 1);
     sectionCuestion.appendChild(containerSolucion);
-    
-    divEliminarSolucion = document.createElement("div");    
+
+    divEliminarSolucion = document.createElement("div");
     divEliminarSolucion.innerHTML =
         '<div class="row mt-3 ml-1">' +
         '<button class="btn btn-danger" onclick="eliminar(solucion' + (numSoluciones + 1) + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
@@ -59,7 +59,7 @@ function nuevaSolucion() {
 
 }
 
-function eliminar(elem){    
+function eliminar(elem) {
     elem.parentNode.removeChild(elem);
 }
 
@@ -93,8 +93,8 @@ function rellenarSolucion(solucion, i) {
         var divOpcionesSolucion = document.createElement("div");
         divOpcionesSolucion.innerHTML =
             '<div class="row mt-3 ml-1">' +
-            '<button class="btn btn-success"><i class="fas fa-check-circle mr-2"></i>Corregir Solución</button>' +
-            '<button class="btn btn-danger ml-3"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
+            '<button class="btn btn-success" onclick="corregirSolucion(' + i + ')"><i class="fas fa-check-circle mr-2"></i>Corregir Solución</button>' +
+            '<button class="btn btn-danger ml-3" onclick="eliminar(solucion' + i + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
             '</div>';
         containerSolucion.appendChild(divOpcionesSolucion);
     } else {
@@ -158,6 +158,24 @@ function crearContainerSolucion(respuesta, claseContainerSolucion, titulo, clase
         '</div>' +
         '</div>';
     return containerSolucion;
+}
+
+function corregirSolucion(i) {
+    var solucion = cuestion.soluciones[i - 1];
+    var containerSolucion = document.querySelector("#solucion" + i);
+
+    solucion.propuestaPorAlumno = false;
+
+    if (document.querySelector("#correcta" + i).checked == true) {
+        solucion.correcta = true;
+    } else {
+        solucion.correcta = false;
+        solucion.razonamientos = [];
+    }
+    eliminar(containerSolucion);
+    rellenarSolucion(solucion, i);
+    document.querySelector("#solucion" + i).scrollIntoView();
+
 }
 
 function rellenarRazonamiento(containerSolucion, razonamiento, i, j) {
