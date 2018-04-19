@@ -15,6 +15,9 @@ function mostrarCuestion() {
         if (cuestion.soluciones[i].hasOwnProperty("razonamientos")) {
             numRazonamientos[i] = cuestion.soluciones[i].razonamientos.length;
         }
+        else{
+           numRazonamientos[i] = 0; 
+        }
     }
 
     sectionCuestion = document.querySelector("#cuestion");
@@ -70,6 +73,7 @@ function rellenarSolucion(solucion, i) {
         sectionCuestion.appendChild(containerSolucion);
 
         var divOpcionesSolucion = document.createElement("div");
+        divOpcionesSolucion.id = "opciones" + i;
         divOpcionesSolucion.innerHTML =
             '<div class="row mt-3 ml-1">' +
             '<button class="btn btn-success" onclick="corregirSolucion(' + i + ')"><i class="fas fa-check-circle mr-2"></i>Corregir Solución</button>' +
@@ -85,7 +89,8 @@ function rellenarSolucion(solucion, i) {
 
         if (solucion.correcta) {
             containerSolucion.querySelector("#correcta" + i).checked = true;
-
+            
+            containerSolucion.appendChild(document.createElement("hr"));
             var divEliminarSolucion = crearDivEliminarSolucion(i);
             containerSolucion.appendChild(divEliminarSolucion);
 
@@ -123,7 +128,7 @@ function crearContainerSolucion(respuesta, claseContainerSolucion, titulo, clase
         '<label for="correcta' + i + '" class="custom-control-label">Solución Correcta</label>' +
         '</div>' +
         '<div class="custom-control custom-radio ml-3">' +
-        '<input type="radio" id="incorrecta' + i + '" name="tipoSolucion' + i + '" class="custom-control-input">' +
+        '<input type="radio" id="incorrecta' + i + '" name="tipoSolucion' + i + '" class="custom-control-input" onchange="marcarSolucionIncorrecta(' + i + ')">' +
         '<label for="incorrecta' + i + '" class="custom-control-label">Solución Incorrecta</label>' +
         '</div>' +
         '</div>';
@@ -202,6 +207,7 @@ function crearDivRazonamiento(textoRazonamiento, claseDivRazonamiento, titulo, c
 
 function crearDivEliminarSolucion(i) {
     var divEliminarSolucion = document.createElement("div");
+    divEliminarSolucion.id = "opciones" + i;
     divEliminarSolucion.innerHTML =
         '<div class="row mt-3 ml-1">' +
         '<button class="btn btn-danger" onclick="eliminarSolucion(' + i + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
@@ -248,8 +254,7 @@ function nuevaSolucion() {
     var claseContainerSolucion;
     var divEliminarSolucion;
     
-    numSoluciones++;
-    
+    numSoluciones++;    
 
     claseContainerSolucion = "container bg-light border p-4 mt-2";
     titulo = "Solución " + numSoluciones;
@@ -364,4 +369,12 @@ function eliminarRazonamiento(i, j){
     console.log(divRazonamiento);
     eliminar(divRazonamiento.nextSibling);
     eliminar(divRazonamiento);
+}
+
+function marcarSolucionIncorrecta(i){
+    var solucion = cuestion.soluciones[i-1];
+    console.log(numRazonamientos[i-1]);
+    if(!solucion.propuestaPorAlumno && numRazonamientos[i-1] == 0){
+        añadirRazonamiento(i);        
+    }
 }
