@@ -86,11 +86,7 @@ function rellenarSolucion(solucion, i) {
         if (solucion.correcta) {
             containerSolucion.querySelector("#correcta" + i).checked = true;
 
-            var divEliminarSolucion = document.createElement("div");
-            divEliminarSolucion.innerHTML =
-                '<div class="row mt-3 ml-1">' +
-                '<button class="btn btn-danger" onclick="eliminar(solucion' + i + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
-                '</div>';
+            var divEliminarSolucion = crearDivEliminarSolucion(i);
             containerSolucion.appendChild(divEliminarSolucion);
 
         } else {
@@ -103,7 +99,7 @@ function rellenarSolucion(solucion, i) {
 
             containerSolucion.appendChild(document.createElement("hr"));
 
-            var divOpcionesSolucion = crearDivOpcionesSolucion(i, j);
+            var divOpcionesSolucion = crearDivOpcionesSolucion(i);
             containerSolucion.appendChild(divOpcionesSolucion);
 
         }
@@ -204,7 +200,16 @@ function crearDivRazonamiento(textoRazonamiento, claseDivRazonamiento, titulo, c
 
 }
 
-function crearDivOpcionesSolucion(i, j) {
+function crearDivEliminarSolucion(i) {
+    var divEliminarSolucion = document.createElement("div");
+    divEliminarSolucion.innerHTML =
+        '<div class="row mt-3 ml-1">' +
+        '<button class="btn btn-danger" onclick="eliminar(solucion' + i + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
+        '</div>';
+    return divEliminarSolucion;
+}
+
+function crearDivOpcionesSolucion(i) {
     var divOpcionesSolucion = document.createElement("div");
     divOpcionesSolucion.id = "opciones" + i;
     divOpcionesSolucion.innerHTML =
@@ -266,21 +271,33 @@ function eliminar(elem) {
 }
 
 function corregirSolucion(i) {
-    var solucion = cuestion.soluciones[i - 1];
-    var containerSolucion = document.querySelector("#solucion" + i);
 
-    solucion.propuestaPorAlumno = false;
+    var solucion = cuestion.soluciones[i - 1];
+    var anteriorContainerSolucion = document.querySelector("#solucion" + i);
+
+    var claseContainerSolucion = "container bg-light border p-4 mt-2";
+    var titulo = "Solución " + i;
+    var claseTitulo = "text-primary";
+    var nuevoContainerSolucion = crearContainerSolucion(solucion.respuesta, claseContainerSolucion, titulo, claseTitulo, i);
+    var divOpcionesSolucion;
 
     if (document.querySelector("#correcta" + i).checked == true) {
         solucion.correcta = true;
+        divOpcionesSolucion = crearDivEliminarSolucion(i);
     } else {
         solucion.correcta = false;
-        solucion.razonamientos = [];
+        divOpcionesSolucion = crearDivOpcionesSolucion(i);
     }
-    eliminar(containerSolucion);
-    rellenarSolucion(solucion, i);
-    document.querySelector("#solucion" + i).scrollIntoView();
+    
+    nuevoContainerSolucion.appendChild(divOpcionesSolucion);
+    sectionCuestion.insertBefore(nuevoContainerSolucion, anteriorContainerSolucion);
+    eliminar(anteriorContainerSolucion);    
 
+    if (solucion.correcta) {
+        document.querySelector("#correcta" + i).checked = true;
+    } else {
+        document.querySelector("#incorrecta" + i).checked = true;
+    }
 }
 
 function añadirRazonamiento(i) {
