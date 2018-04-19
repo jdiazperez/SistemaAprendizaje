@@ -142,7 +142,7 @@ function rellenarRazonamiento(containerSolucion, razonamiento, i, j) {
         var divOpcionesRazonamiento = document.createElement("div");
         divOpcionesRazonamiento.className = "row mt-3 ml-2";
         divOpcionesRazonamiento.innerHTML =
-            '<button class="btn btn-success"><i class="fas fa-check-circle mr-2"></i>Corregir Razonamiento</button>' +
+            '<button class="btn btn-success" onclick="corregirRazonamiento(' + i + ', ' + j + ')"><i class="fas fa-check-circle mr-2"></i>Corregir Razonamiento</button>' +
             '<button class="btn btn-warning ml-3"><i class="fas fa-trash-alt mr-2"></i>Eliminar Razonamiento</button>';
         divRazonamiento.appendChild(divOpcionesRazonamiento);
 
@@ -158,22 +158,10 @@ function rellenarRazonamiento(containerSolucion, razonamiento, i, j) {
         } else {
             divRazonamiento.querySelector("#injustificado" + j + "Solucion" + i).checked = true;
 
-            var divError = document.createElement("div");
-            divError.innerHTML =
-                '<div class="form-group mt-3 ml-2">' +
-                '<label for="error' + j + 'Solucion' + i + '"><h6 class="text-danger">Error</h6></label>' +
-                '<textarea id="error' + j + 'Solucion' + i + '" rows="3" class="form-control">' +
-                razonamiento.error +
-                '</textarea>' +
-                '</div>';
+            var divError = crearDivError(i, j, razonamiento.error);
             divRazonamiento.appendChild(divError);
         }
-
-        var divEliminarRazonamiento = document.createElement("div");
-        divEliminarRazonamiento.innerHTML =
-            '<div class="row mt-3 ml-2">' +
-            '<button class="btn btn-warning"><i class="fas fa-trash-alt mr-2"></i>Eliminar Razonamiento</button>' +
-            '</div>';
+        var divEliminarRazonamiento = crearDivEliminarRazonamiento();
         divRazonamiento.appendChild(divEliminarRazonamiento);
 
     }
@@ -184,11 +172,12 @@ function rellenarRazonamiento(containerSolucion, razonamiento, i, j) {
 function crearDivRazonamiento(textoRazonamiento, claseDivRazonamiento, titulo, claseTitulo, i, j) {
 
     var divRazonamiento = document.createElement("div");
+    divRazonamiento.id = "razonamiento" + j + "Solucion" + i;
     divRazonamiento.className = claseDivRazonamiento;
     divRazonamiento.innerHTML =
         '<div class="form-group mt-3 ml-2">' +
-        '<label for="razonamiento' + j + 'solucion' + i + '"><h5 class="' + claseTitulo + '">' + titulo + '</h5></label>' +
-        '<textarea id="razonamiento' + j + 'solucion' + i + '" rows="3" class="form-control" placeholder="Introducir el razonamiento a la respuesta">' +
+        '<label for="textRazonamiento' + j + 'solucion' + i + '"><h5 class="' + claseTitulo + '">' + titulo + '</h5></label>' +
+        '<textarea id="textRazonamiento' + j + 'solucion' + i + '" rows="3" class="form-control" placeholder="Introducir el razonamiento a la respuesta">' +
         textoRazonamiento +
         '</textarea>' +
         '</div>' +
@@ -217,6 +206,27 @@ function crearDivOpcionesSolucion(i, j) {
         '<button class="btn btn-danger ml-3" onclick="eliminar(solucion' + i + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
         '</div>';
     return divOpcionesSolucion;
+}
+
+function crearDivError(i, j, textoError) {
+    var divError = document.createElement("div");
+    divError.innerHTML =
+        '<div class="form-group mt-3 ml-2">' +
+        '<label for="error' + j + 'Solucion' + i + '"><h6 class="text-danger">Error</h6></label>' +
+        '<textarea id="error' + j + 'Solucion' + i + '" rows="3" class="form-control" placeholder="Introducir el error del razonamiento">' +
+        textoError +
+        '</textarea>' +
+        '</div>';
+    return divError
+}
+
+function crearDivEliminarRazonamiento() {
+    var divEliminarRazonamiento = document.createElement("div");
+    divEliminarRazonamiento.innerHTML =
+        '<div class="row mt-3 ml-2">' +
+        '<button class="btn btn-warning"><i class="fas fa-trash-alt mr-2"></i>Eliminar Razonamiento</button>' +
+        '</div>';
+    return divEliminarRazonamiento;
 }
 
 function nuevaSolucion() {
@@ -279,4 +289,35 @@ function añadirRazonamiento(i, j) {
     containerSolucion.insertBefore(divRazonamiento, divOpcionesSolucion);
     containerSolucion.insertBefore(document.createElement("hr"), divOpcionesSolucion);
 
+}
+
+function corregirRazonamiento(i, j) {
+    var razonamiento = cuestion.soluciones[i - 1].razonamientos[j - 1];
+    var containerSolucion = document.querySelector("#solucion" + i);
+    var anteriorDivRazonamiento = document.querySelector("#razonamiento" + j + "Solucion" + i);
+
+    var claseDivRazonamiento = "";
+    var titulo = "Razonamiento " + j;
+    var claseTitulo = "text-info";
+    var nuevoDivRazonamiento = crearDivRazonamiento(razonamiento.texto, claseDivRazonamiento, titulo, claseTitulo, i, j);
+
+    if (document.querySelector("#justificado" + j + "Solucion" + i).checked == true) {
+        razonamiento.justificado = true;
+    } else {
+        razonamiento.justificado = false;
+        var divError = crearDivError(i, j, "");
+        nuevoDivRazonamiento.appendChild(divError);
+    }
+
+    var divEliminarRazonamiento = crearDivEliminarRazonamiento();
+    nuevoDivRazonamiento.appendChild(divEliminarRazonamiento);
+
+    containerSolucion.insertBefore(nuevoDivRazonamiento, anteriorDivRazonamiento);
+    eliminar(anteriorDivRazonamiento);
+
+    if (razonamiento.justificado) {
+        document.querySelector("#justificado" + j + "Solucion" + i).checked = true;
+    } else {
+        document.querySelector("#injustificado" + j + "Solucion" + i).checked = true;
+    }
 }
