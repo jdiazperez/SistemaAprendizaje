@@ -266,21 +266,17 @@ function corregirSolucion(i) {
 }
 
 function añadirRazonamiento(i, j) {
-    
+
     var claseDivRazonamiento = "";
     var titulo = "Razonamiento " + j;
     var claseTitulo = "text-info";
     var divRazonamiento = crearDivRazonamiento("", claseDivRazonamiento, titulo, claseTitulo, i, j);
     j++;
 
-    var divOpcionesSolucion = document.querySelector("#opciones" + i);
-    eliminar(divOpcionesSolucion);
-
     var containerSolucion = document.querySelector("#solucion" + i);
-    
-    containerSolucion.appendChild(divRazonamiento);
-    containerSolucion.appendChild(document.createElement("hr"));
+    var divOpcionesSolucion = document.querySelector("#opciones" + i);
 
-    divOpcionesSolucion = crearDivOpcionesSolucion(i, j);
-    containerSolucion.appendChild(divOpcionesSolucion);
+    containerSolucion.insertBefore(divRazonamiento, divOpcionesSolucion);
+    containerSolucion.insertBefore(document.createElement("hr"), divOpcionesSolucion);
+
 }
