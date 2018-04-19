@@ -73,7 +73,7 @@ function rellenarSolucion(solucion, i) {
         divOpcionesSolucion.innerHTML =
             '<div class="row mt-3 ml-1">' +
             '<button class="btn btn-success" onclick="corregirSolucion(' + i + ')"><i class="fas fa-check-circle mr-2"></i>Corregir Solución</button>' +
-            '<button class="btn btn-danger ml-3" onclick="eliminar(solucion' + i + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
+            '<button class="btn btn-danger ml-3" onclick="eliminarSolucion(' + i + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
             '</div>';
         containerSolucion.appendChild(divOpcionesSolucion);
     } else {
@@ -146,7 +146,7 @@ function rellenarRazonamiento(containerSolucion, razonamiento, i, j) {
         divOpcionesRazonamiento.className = "row mt-3 ml-2";
         divOpcionesRazonamiento.innerHTML =
             '<button class="btn btn-success" onclick="corregirRazonamiento(' + i + ', ' + j + ')"><i class="fas fa-check-circle mr-2"></i>Corregir Razonamiento</button>' +
-            '<button class="btn btn-warning ml-3"><i class="fas fa-trash-alt mr-2"></i>Eliminar Razonamiento</button>';
+            '<button class="btn btn-warning ml-3" onclick="eliminarRazonamiento(' + i + ', ' + j + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Razonamiento</button>';
         divRazonamiento.appendChild(divOpcionesRazonamiento);
 
     } else {
@@ -164,7 +164,7 @@ function rellenarRazonamiento(containerSolucion, razonamiento, i, j) {
             var divError = crearDivError(i, j, razonamiento.error);
             divRazonamiento.appendChild(divError);
         }
-        var divEliminarRazonamiento = crearDivEliminarRazonamiento();
+        var divEliminarRazonamiento = crearDivEliminarRazonamiento(i, j);
         divRazonamiento.appendChild(divEliminarRazonamiento);
 
     }
@@ -204,7 +204,7 @@ function crearDivEliminarSolucion(i) {
     var divEliminarSolucion = document.createElement("div");
     divEliminarSolucion.innerHTML =
         '<div class="row mt-3 ml-1">' +
-        '<button class="btn btn-danger" onclick="eliminar(solucion' + i + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
+        '<button class="btn btn-danger" onclick="eliminarSolucion(' + i + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
         '</div>';
     return divEliminarSolucion;
 }
@@ -215,7 +215,7 @@ function crearDivOpcionesSolucion(i) {
     divOpcionesSolucion.innerHTML =
         '<div class="row mt-3 ml-1">' +
         '<button class="btn btn-info" onclick="añadirRazonamiento(' + i + ')"><i class="far fa-comment-alt mr-2"></i>Añadir Razonamiento</button>' +
-        '<button class="btn btn-danger ml-3" onclick="eliminar(solucion' + i + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
+        '<button class="btn btn-danger ml-3" onclick="eliminarSolucion(' + i + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
         '</div>';
     return divOpcionesSolucion;
 }
@@ -232,11 +232,11 @@ function crearDivError(i, j, textoError) {
     return divError
 }
 
-function crearDivEliminarRazonamiento() {
+function crearDivEliminarRazonamiento(i, j) {
     var divEliminarRazonamiento = document.createElement("div");
     divEliminarRazonamiento.innerHTML =
         '<div class="row mt-3 ml-2">' +
-        '<button class="btn btn-warning"><i class="fas fa-trash-alt mr-2"></i>Eliminar Razonamiento</button>' +
+        '<button class="btn btn-warning" onclick="eliminarRazonamiento(' + i + ', ' + j + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Razonamiento</button>' +
         '</div>';
     return divEliminarRazonamiento;
 }
@@ -247,8 +247,9 @@ function nuevaSolucion() {
     var claseTitulo;
     var claseContainerSolucion;
     var divEliminarSolucion;
-
+    
     numSoluciones++;
+    
 
     claseContainerSolucion = "container bg-light border p-4 mt-2";
     titulo = "Solución " + numSoluciones;
@@ -259,14 +260,21 @@ function nuevaSolucion() {
     divEliminarSolucion = document.createElement("div");
     divEliminarSolucion.innerHTML =
         '<div class="row mt-3 ml-1">' +
-        '<button class="btn btn-danger" onclick="eliminar(solucion' + numSoluciones + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
+        '<button class="btn btn-danger" onclick="eliminarSolucion(' + numSoluciones + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
         '</div>';
     containerSolucion.appendChild(divEliminarSolucion);
     containerSolucion.scrollIntoView();
 
 }
 
+function eliminarSolucion(i){
+    var containerSolucion = document.querySelector("#solucion" + i);
+    eliminar(containerSolucion);
+    numSoluciones--;
+}
+
 function eliminar(elem) {
+    console.log(elem);
     elem.parentNode.removeChild(elem);
 }
 
@@ -308,7 +316,7 @@ function añadirRazonamiento(i) {
     var claseTitulo = "text-info";
     var divRazonamiento = crearDivRazonamiento("", claseDivRazonamiento, titulo, claseTitulo, i, numRazonamientos[i - 1]);
 
-    var divEliminarRazonamiento = crearDivEliminarRazonamiento();
+    var divEliminarRazonamiento = crearDivEliminarRazonamiento(i, numRazonamientos[i - 1]);
     divRazonamiento.appendChild(divEliminarRazonamiento);
 
     var containerSolucion = document.querySelector("#solucion" + i);
@@ -348,4 +356,12 @@ function corregirRazonamiento(i, j) {
     } else {
         document.querySelector("#injustificado" + j + "Solucion" + i).checked = true;
     }
+}
+
+function eliminarRazonamiento(i, j){
+    var divRazonamiento = document.querySelector("#razonamiento" + j + "Solucion" + i);
+    numRazonamientos[i - 1]--;
+    console.log(divRazonamiento);
+    eliminar(divRazonamiento.nextSibling);
+    eliminar(divRazonamiento);
 }
