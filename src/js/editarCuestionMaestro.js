@@ -14,9 +14,8 @@ function mostrarCuestion() {
     for (var i = 0; i < numSoluciones; i++) {
         if (cuestion.soluciones[i].hasOwnProperty("razonamientos")) {
             numRazonamientos[i] = cuestion.soluciones[i].razonamientos.length;
-        }
-        else{
-           numRazonamientos[i] = 0; 
+        } else {
+            numRazonamientos[i] = 0;
         }
     }
 
@@ -66,7 +65,7 @@ function rellenarSolucion(solucion, i) {
     var claseContainerSolucion;
 
     if (solucion.propuestaPorAlumno) {
-        claseContainerSolucion = "container bg-light border border-info p-4 mt-2";
+        claseContainerSolucion = "container bg-light border border-info p-4 mt-2 propuestaPorAlumno";
         titulo = "¡¡¡Propuesta de Solución!!!";
         claseTitulo = "text-light bg-info";
         containerSolucion = crearContainerSolucion(solucion.respuesta, claseContainerSolucion, titulo, claseTitulo, i);
@@ -79,6 +78,7 @@ function rellenarSolucion(solucion, i) {
             '<button class="btn btn-success" onclick="corregirSolucion(' + i + ')"><i class="fas fa-check-circle mr-2"></i>Corregir Solución</button>' +
             '<button class="btn btn-danger ml-3" onclick="eliminarSolucion(' + i + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
             '</div>';
+        containerSolucion.appendChild(document.createElement("hr"));
         containerSolucion.appendChild(divOpcionesSolucion);
     } else {
         claseContainerSolucion = "container bg-light border p-4 mt-2";
@@ -89,7 +89,7 @@ function rellenarSolucion(solucion, i) {
 
         if (solucion.correcta) {
             containerSolucion.querySelector("#correcta" + i).checked = true;
-            
+
             containerSolucion.appendChild(document.createElement("hr"));
             var divEliminarSolucion = crearDivEliminarSolucion(i);
             containerSolucion.appendChild(divEliminarSolucion);
@@ -103,7 +103,6 @@ function rellenarSolucion(solucion, i) {
             }
 
             containerSolucion.appendChild(document.createElement("hr"));
-
             var divOpcionesSolucion = crearDivOpcionesSolucion(i);
             containerSolucion.appendChild(divOpcionesSolucion);
 
@@ -124,11 +123,11 @@ function crearContainerSolucion(respuesta, claseContainerSolucion, titulo, clase
         '</div>' +
         '<div class="row">' +
         '<div class="custom-control custom-radio ml-3">' +
-        '<input type="radio" id="correcta' + i + '" name="tipoSolucion' + i + '" class="custom-control-input">' +
+        '<input type="radio" id="correcta' + i + '" name="tipoSolucion' + i + '" class="custom-control-input" onclick="marcarSolucionCorrecta(' + i + ')">' +
         '<label for="correcta' + i + '" class="custom-control-label">Solución Correcta</label>' +
         '</div>' +
         '<div class="custom-control custom-radio ml-3">' +
-        '<input type="radio" id="incorrecta' + i + '" name="tipoSolucion' + i + '" class="custom-control-input" onchange="marcarSolucionIncorrecta(' + i + ')">' +
+        '<input type="radio" id="incorrecta' + i + '" name="tipoSolucion' + i + '" class="custom-control-input" onclick="marcarSolucionIncorrecta(' + i + ')">' +
         '<label for="incorrecta' + i + '" class="custom-control-label">Solución Incorrecta</label>' +
         '</div>' +
         '</div>';
@@ -253,8 +252,9 @@ function nuevaSolucion() {
     var claseTitulo;
     var claseContainerSolucion;
     var divEliminarSolucion;
-    
-    numSoluciones++;    
+
+    numRazonamientos[numSoluciones] = 0;
+    numSoluciones++;
 
     claseContainerSolucion = "container bg-light border p-4 mt-2";
     titulo = "Solución " + numSoluciones;
@@ -262,24 +262,20 @@ function nuevaSolucion() {
     containerSolucion = crearContainerSolucion("", claseContainerSolucion, titulo, claseTitulo, numSoluciones);
     sectionCuestion.appendChild(containerSolucion);
 
-    divEliminarSolucion = document.createElement("div");
-    divEliminarSolucion.innerHTML =
-        '<div class="row mt-3 ml-1">' +
-        '<button class="btn btn-danger" onclick="eliminarSolucion(' + numSoluciones + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Solución</button>' +
-        '</div>';
+    divEliminarSolucion = crearDivEliminarSolucion(numSoluciones);
+
+    containerSolucion.appendChild(document.createElement("hr"));
     containerSolucion.appendChild(divEliminarSolucion);
     containerSolucion.scrollIntoView();
-
 }
 
-function eliminarSolucion(i){
+function eliminarSolucion(i) {
     var containerSolucion = document.querySelector("#solucion" + i);
     eliminar(containerSolucion);
     numSoluciones--;
 }
 
 function eliminar(elem) {
-    console.log(elem);
     elem.parentNode.removeChild(elem);
 }
 
@@ -302,14 +298,16 @@ function corregirSolucion(i) {
         divOpcionesSolucion = crearDivOpcionesSolucion(i);
     }
     
+    nuevoContainerSolucion.appendChild(document.createElement("hr"));
     nuevoContainerSolucion.appendChild(divOpcionesSolucion);
     sectionCuestion.insertBefore(nuevoContainerSolucion, anteriorContainerSolucion);
-    eliminar(anteriorContainerSolucion);    
+    eliminar(anteriorContainerSolucion);
 
     if (solucion.correcta) {
         document.querySelector("#correcta" + i).checked = true;
     } else {
         document.querySelector("#incorrecta" + i).checked = true;
+        añadirRazonamiento(i);
     }
 }
 
@@ -363,18 +361,36 @@ function corregirRazonamiento(i, j) {
     }
 }
 
-function eliminarRazonamiento(i, j){
+function eliminarRazonamiento(i, j) {
     var divRazonamiento = document.querySelector("#razonamiento" + j + "Solucion" + i);
     numRazonamientos[i - 1]--;
-    console.log(divRazonamiento);
+    console.log("nextNode: " + divRazonamiento.nextSibling);
+    console.log("divrazona:" + divRazonamiento);
     eliminar(divRazonamiento.nextSibling);
     eliminar(divRazonamiento);
 }
 
-function marcarSolucionIncorrecta(i){
-    var solucion = cuestion.soluciones[i-1];
-    console.log(numRazonamientos[i-1]);
-    if(!solucion.propuestaPorAlumno && numRazonamientos[i-1] == 0){
-        añadirRazonamiento(i);        
+function marcarSolucionIncorrecta(i) {
+    var containerSolucion = document.querySelector("#solucion" + i);
+    if (!containerSolucion.classList.contains("propuestaPorAlumno") && numRazonamientos[i - 1] == 0) {
+        añadirRazonamiento(i);
+        var anterioresOpciones = document.querySelector("#opciones" + i);
+        var nuevasOpciones = crearDivOpcionesSolucion(i);
+        containerSolucion.insertBefore(nuevasOpciones, anterioresOpciones);
+        eliminar(anterioresOpciones);
+    }
+}
+
+function marcarSolucionCorrecta(i) {
+    var containerSolucion = document.querySelector("#solucion" + i);
+    if (!containerSolucion.classList.contains("propuestaPorAlumno")) {
+        while (numRazonamientos[i - 1] != 0) {
+            console.log("numRazonamientos: " + numRazonamientos[i - 1]);
+            eliminarRazonamiento(i, numRazonamientos[i - 1]);
+        }
+        var anterioresOpciones = document.querySelector("#opciones" + i);
+        var nuevasOpciones = crearDivEliminarSolucion(i);
+        containerSolucion.insertBefore(nuevasOpciones, anterioresOpciones);
+        eliminar(anterioresOpciones);
     }
 }
