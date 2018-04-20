@@ -59,12 +59,7 @@ function rellenarCampos(containerEnunciado) {
 }
 
 function rellenarSolucion(solucion, i) {
-    var containerSolucion;
-    var titulo;
-    var claseTitulo;
-    var claseContainerSolucion;
-
-    containerSolucion = crearContainerSolucion(solucion.propuestaPorAlumno, solucion.respuesta, i);
+    var containerSolucion = crearContainerSolucion(solucion.propuestaPorAlumno, solucion.respuesta, i);
     sectionCuestion.appendChild(containerSolucion);
 
     if (solucion.propuestaPorAlumno) {
@@ -140,17 +135,9 @@ function crearContainerSolucion(propuestaPorAlumno, respuesta, i) {
 }
 
 function rellenarRazonamiento(containerSolucion, razonamiento, i, j) {
-    var divRazonamiento;
-    var claseDivRazonamiento;
-    var titulo;
-    var claseTitulo;
+    var divRazonamiento = crearDivRazonamiento(razonamiento.propuestoPorAlumno, razonamiento.texto, i, j);
 
     if (razonamiento.propuestoPorAlumno) {
-        claseDivRazonamiento = "border border-info";
-        titulo = "¡¡¡Propuesta de Razonamiento!!!";
-        claseTitulo = "text-light bg-info";
-        divRazonamiento = crearDivRazonamiento(razonamiento.texto, claseDivRazonamiento, titulo, claseTitulo, i, j);
-
         var divOpcionesRazonamiento = document.createElement("div");
         divOpcionesRazonamiento.className = "row mt-3 ml-2";
         divOpcionesRazonamiento.innerHTML =
@@ -159,11 +146,6 @@ function rellenarRazonamiento(containerSolucion, razonamiento, i, j) {
         divRazonamiento.appendChild(divOpcionesRazonamiento);
 
     } else {
-        claseDivRazonamiento = "";
-        titulo = "Razonamiento " + j;
-        claseTitulo = "text-info";
-        divRazonamiento = crearDivRazonamiento(razonamiento.texto, claseDivRazonamiento, titulo, claseTitulo, i, j);
-
         if (razonamiento.justificado) {
             divRazonamiento.querySelector("#justificado" + j + "Solucion" + i).checked = true;
 
@@ -181,9 +163,24 @@ function rellenarRazonamiento(containerSolucion, razonamiento, i, j) {
     containerSolucion.appendChild(divRazonamiento);
 }
 
-function crearDivRazonamiento(textoRazonamiento, claseDivRazonamiento, titulo, claseTitulo, i, j) {
+function crearDivRazonamiento(propuestoPorAlumno, textoRazonamiento, i, j) {
+    var divRazonamiento;
+    var claseDivRazonamiento;
+    var titulo;
+    var claseTitulo;
 
-    var divRazonamiento = document.createElement("div");
+    if (propuestoPorAlumno) {
+        claseDivRazonamiento = "border border-info";
+        titulo = "¡¡¡Propuesta de Razonamiento!!!";
+        claseTitulo = "text-light bg-info";
+
+    } else {
+        claseDivRazonamiento = "";
+        titulo = "Razonamiento " + j;
+        claseTitulo = "text-info";
+    }
+
+    divRazonamiento = document.createElement("div");
     divRazonamiento.id = "razonamiento" + j + "Solucion" + i;
     divRazonamiento.className = claseDivRazonamiento;
     divRazonamiento.innerHTML =
@@ -206,7 +203,6 @@ function crearDivRazonamiento(textoRazonamiento, claseDivRazonamiento, titulo, c
         '</div>';
 
     return divRazonamiento;
-
 }
 
 function crearDivEliminarSolucion(i) {
@@ -313,10 +309,7 @@ function corregirSolucion(i) {
 function añadirRazonamiento(i) {
     numRazonamientos[i - 1]++;
 
-    var claseDivRazonamiento = "";
-    var titulo = "Razonamiento " + numRazonamientos[i - 1];
-    var claseTitulo = "text-info";
-    var divRazonamiento = crearDivRazonamiento("", claseDivRazonamiento, titulo, claseTitulo, i, numRazonamientos[i - 1]);
+    var divRazonamiento = crearDivRazonamiento(false, "", i, numRazonamientos[i - 1]);
 
     var divEliminarRazonamiento = crearDivEliminarRazonamiento(i, numRazonamientos[i - 1]);
     divRazonamiento.appendChild(divEliminarRazonamiento);
@@ -334,10 +327,7 @@ function corregirRazonamiento(i, j) {
     var containerSolucion = document.querySelector("#solucion" + i);
     var anteriorDivRazonamiento = document.querySelector("#razonamiento" + j + "Solucion" + i);
 
-    var claseDivRazonamiento = "";
-    var titulo = "Razonamiento " + j;
-    var claseTitulo = "text-info";
-    var nuevoDivRazonamiento = crearDivRazonamiento(razonamiento.texto, claseDivRazonamiento, titulo, claseTitulo, i, j);
+    var nuevoDivRazonamiento = crearDivRazonamiento(false, razonamiento.texto, i, j);
 
     if (document.querySelector("#justificado" + j + "Solucion" + i).checked == true) {
         razonamiento.justificado = true;
