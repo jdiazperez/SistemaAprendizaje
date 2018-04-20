@@ -185,7 +185,7 @@ function crearDivRazonamiento(propuestoPorAlumno, textoRazonamiento, i, j) {
     divRazonamiento.className = claseDivRazonamiento;
     divRazonamiento.innerHTML =
         '<div class="form-group mt-3 ml-2">' +
-        '<label for="textRazonamiento' + j + 'solucion' + i + '"><h5 class="' + claseTitulo + '">' + titulo + '</h5></label>' +
+        '<label id="labelTextRazonamiento' + j + 'solucion' + i + '" for="textRazonamiento' + j + 'solucion' + i + '"><h5 class="' + claseTitulo + '">' + titulo + '</h5></label>' +
         '<textarea id="textRazonamiento' + j + 'solucion' + i + '" rows="3" class="form-control" placeholder="Introducir el razonamiento a la respuesta">' +
         textoRazonamiento +
         '</textarea>' +
@@ -352,11 +352,11 @@ function corregirRazonamiento(i, j) {
 
 function eliminarRazonamiento(i, j) {
     var divRazonamiento = document.querySelector("#razonamiento" + j + "Solucion" + i);
-    numRazonamientos[i - 1]--;
-    console.log("nextNode: " + divRazonamiento.nextSibling);
-    console.log("divrazona:" + divRazonamiento);
-    eliminar(divRazonamiento.nextSibling);
-    eliminar(divRazonamiento);
+    if (divRazonamiento !== null) {
+        eliminar(divRazonamiento.nextSibling);
+        eliminar(divRazonamiento);
+        numRazonamientos[i - 1]--;
+    }
 }
 
 function marcarSolucionIncorrecta(i) {
@@ -372,10 +372,12 @@ function marcarSolucionIncorrecta(i) {
 
 function marcarSolucionCorrecta(i) {
     var containerSolucion = document.querySelector("#solucion" + i);
+    var j = 1;
     if (!containerSolucion.classList.contains("propuestaPorAlumno")) {
         while (numRazonamientos[i - 1] != 0) {
-            console.log("numRazonamientos: " + numRazonamientos[i - 1]);
-            eliminarRazonamiento(i, numRazonamientos[i - 1]);
+            console.log("eliminarRazonamiento:" + i  + " " + j);
+            eliminarRazonamiento(i, j);
+            j++;
         }
         var anterioresOpciones = document.querySelector("#opciones" + i);
         var nuevasOpciones = crearDivEliminarSolucion(i);
