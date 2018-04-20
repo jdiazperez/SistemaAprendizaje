@@ -64,13 +64,10 @@ function rellenarSolucion(solucion, i) {
     var claseTitulo;
     var claseContainerSolucion;
 
-    if (solucion.propuestaPorAlumno) {
-        claseContainerSolucion = "container bg-light border border-info p-4 mt-2 propuestaPorAlumno";
-        titulo = "¡¡¡Propuesta de Solución!!!";
-        claseTitulo = "text-light bg-info";
-        containerSolucion = crearContainerSolucion(solucion.respuesta, claseContainerSolucion, titulo, claseTitulo, i);
-        sectionCuestion.appendChild(containerSolucion);
+    containerSolucion = crearContainerSolucion(solucion.propuestaPorAlumno, solucion.respuesta, i);
+    sectionCuestion.appendChild(containerSolucion);
 
+    if (solucion.propuestaPorAlumno) {
         var divOpcionesSolucion = document.createElement("div");
         divOpcionesSolucion.id = "opciones" + i;
         divOpcionesSolucion.innerHTML =
@@ -80,13 +77,8 @@ function rellenarSolucion(solucion, i) {
             '</div>';
         containerSolucion.appendChild(document.createElement("hr"));
         containerSolucion.appendChild(divOpcionesSolucion);
-    } else {
-        claseContainerSolucion = "container bg-light border p-4 mt-2";
-        titulo = "Solución " + i;
-        claseTitulo = "text-primary";
-        containerSolucion = crearContainerSolucion(solucion.respuesta, claseContainerSolucion, titulo, claseTitulo, i);
-        sectionCuestion.appendChild(containerSolucion);
 
+    } else {
         if (solucion.correcta) {
             containerSolucion.querySelector("#correcta" + i).checked = true;
 
@@ -105,13 +97,26 @@ function rellenarSolucion(solucion, i) {
             containerSolucion.appendChild(document.createElement("hr"));
             var divOpcionesSolucion = crearDivOpcionesSolucion(i);
             containerSolucion.appendChild(divOpcionesSolucion);
-
         }
     }
 }
 
-function crearContainerSolucion(respuesta, claseContainerSolucion, titulo, claseTitulo, i) {
-    var containerSolucion = document.createElement("div");
+function crearContainerSolucion(propuestaPorAlumno, respuesta, i) {
+    var containerSolucion;
+    var claseContainerSolucion;
+    var titulo;
+    var claseTitulo;
+
+    if (propuestaPorAlumno) {
+        claseContainerSolucion = "container bg-light border border-info p-4 mt-2 propuestaPorAlumno";
+        titulo = "¡¡¡Propuesta de Solución!!!";
+        claseTitulo = "text-light bg-info";
+    } else {
+        claseContainerSolucion = "container bg-light border p-4 mt-2";
+        titulo = "Solución " + i;
+        claseTitulo = "text-primary";
+    }
+    containerSolucion = document.createElement("div");
     containerSolucion.id = "solucion" + i;
     containerSolucion.className = claseContainerSolucion;
     containerSolucion.innerHTML =
@@ -256,10 +261,7 @@ function nuevaSolucion() {
     numRazonamientos[numSoluciones] = 0;
     numSoluciones++;
 
-    claseContainerSolucion = "container bg-light border p-4 mt-2";
-    titulo = "Solución " + numSoluciones;
-    claseTitulo = "text-primary";
-    containerSolucion = crearContainerSolucion("", claseContainerSolucion, titulo, claseTitulo, numSoluciones);
+    containerSolucion = crearContainerSolucion(false, "", numSoluciones);
     sectionCuestion.appendChild(containerSolucion);
 
     divEliminarSolucion = crearDivEliminarSolucion(numSoluciones);
@@ -284,10 +286,7 @@ function corregirSolucion(i) {
     var solucion = cuestion.soluciones[i - 1];
     var anteriorContainerSolucion = document.querySelector("#solucion" + i);
 
-    var claseContainerSolucion = "container bg-light border p-4 mt-2";
-    var titulo = "Solución " + i;
-    var claseTitulo = "text-primary";
-    var nuevoContainerSolucion = crearContainerSolucion(solucion.respuesta, claseContainerSolucion, titulo, claseTitulo, i);
+    var nuevoContainerSolucion = crearContainerSolucion(false, solucion.respuesta, i);
     var divOpcionesSolucion;
 
     if (document.querySelector("#correcta" + i).checked == true) {
@@ -297,7 +296,7 @@ function corregirSolucion(i) {
         solucion.correcta = false;
         divOpcionesSolucion = crearDivOpcionesSolucion(i);
     }
-    
+
     nuevoContainerSolucion.appendChild(document.createElement("hr"));
     nuevoContainerSolucion.appendChild(divOpcionesSolucion);
     sectionCuestion.insertBefore(nuevoContainerSolucion, anteriorContainerSolucion);
