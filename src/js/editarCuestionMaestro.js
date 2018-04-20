@@ -170,7 +170,7 @@ function crearDivRazonamiento(propuestoPorAlumno, textoRazonamiento, i, j) {
     var claseTitulo;
 
     if (propuestoPorAlumno) {
-        claseDivRazonamiento = "border border-info";
+        claseDivRazonamiento = "border border-info propuestoPorAlumno";
         titulo = "¡¡¡Propuesta de Razonamiento!!!";
         claseTitulo = "text-light bg-info";
 
@@ -196,7 +196,7 @@ function crearDivRazonamiento(propuestoPorAlumno, textoRazonamiento, i, j) {
         '<label for="justificado' + j + 'Solucion' + i + '" class="custom-control-label">Razonamiento Justificado</label>' +
         '</div>' +
         '<div class="custom-control custom-radio ml-3">' +
-        '<input type="radio" id="injustificado' + j + 'Solucion' + i + '" name="tipoRazonamiento' + j + 'Solucion' + i + '" class="custom-control-input">' +
+        '<input type="radio" id="injustificado' + j + 'Solucion' + i + '" name="tipoRazonamiento' + j + 'Solucion' + i + '" class="custom-control-input" onclick="marcarRazonamientoInjustificado(' + i + ', ' + j + ')">' +
         '<label for="injustificado' + j + 'Solucion' + i + '" class="custom-control-label">Razonamiento Injustificado</label>' +
         '</div>' +
         '</div>' +
@@ -240,6 +240,7 @@ function crearDivError(i, j, textoError) {
 
 function crearDivEliminarRazonamiento(i, j) {
     var divEliminarRazonamiento = document.createElement("div");
+    divEliminarRazonamiento.id = "eliminar" + j + "Solucion" + i;
     divEliminarRazonamiento.innerHTML =
         '<div class="row mt-3 ml-2">' +
         '<button class="btn btn-warning" onclick="eliminarRazonamiento(' + i + ', ' + j + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Razonamiento</button>' +
@@ -337,7 +338,7 @@ function corregirRazonamiento(i, j) {
         nuevoDivRazonamiento.appendChild(divError);
     }
 
-    var divEliminarRazonamiento = crearDivEliminarRazonamiento();
+    var divEliminarRazonamiento = crearDivEliminarRazonamiento(i, j);
     nuevoDivRazonamiento.appendChild(divEliminarRazonamiento);
 
     containerSolucion.insertBefore(nuevoDivRazonamiento, anteriorDivRazonamiento);
@@ -375,7 +376,6 @@ function marcarSolucionCorrecta(i) {
     var j = 1;
     if (!containerSolucion.classList.contains("propuestaPorAlumno")) {
         while (numRazonamientos[i - 1] != 0) {
-            console.log("eliminarRazonamiento:" + i  + " " + j);
             eliminarRazonamiento(i, j);
             j++;
         }
@@ -383,5 +383,17 @@ function marcarSolucionCorrecta(i) {
         var nuevasOpciones = crearDivEliminarSolucion(i);
         containerSolucion.insertBefore(nuevasOpciones, anterioresOpciones);
         eliminar(anterioresOpciones);
+    }
+}
+
+function marcarRazonamientoInjustificado(i, j) {    
+    var divRazonamiento = document.querySelector("#razonamiento" + j + "Solucion" + i);    
+    var divError;
+    var divEliminar = document.querySelector("#eliminar" + j + "Solucion" + i);    
+    var textError = document.querySelector("#error" + j + "Solucion" + i);
+    
+    if (!divRazonamiento.classList.contains("propuestoPorAlumno") && textError === null) {
+        divError = crearDivError(i, j, "");
+        divRazonamiento.insertBefore(divError, divEliminar);
     }
 }
