@@ -16,7 +16,6 @@ function listarCuestiones() {
             "</div>";
         containerCuestiones.appendChild(rowCuestion);
     }
-
 }
 
 function responderCuestion(idCuestion){
