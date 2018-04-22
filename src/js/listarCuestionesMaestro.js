@@ -38,7 +38,6 @@ function agregarListeners() {
 
 function editarCuestion() {
     localStorage.setItem("editarCuestion", this.id.substring(14));
-
 }
 
 function eliminarCuestion() {
