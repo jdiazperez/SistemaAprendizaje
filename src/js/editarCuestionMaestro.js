@@ -17,7 +17,7 @@ function mostrarCuestion() {
     containerEnunciado.innerHTML =
         "<div class='form-group'>" +
         "<label for='enunciado'><h4 class='text-primary'>Enunciado</h4></label>" +
-        "<input type='text' id='enunciado' class='form-control' placeholder='Introducir la pregunta'>" +
+        "<input type='text' id='enunciado' class='form-control' placeholder='Introducir la pregunta' required>" +
         "</div>" +
         "<div class='row'>" +
         "<div class='custom-control custom-checkbox ml-3'>" +
@@ -120,13 +120,13 @@ function crearContainerSolucion(propuestaPorAlumno, respuesta, i) {
     containerSolucion.innerHTML =
         '<div class="form-group">' +
         '<label for="textSolucion' + i + '"><h4 class="' + claseTitulo + '">' + titulo + '</h4></label>' +
-        '<textarea id="textSolucion' + i + '" rows="3" class="form-control" placeholder="Introducir la respuesta">' +
+        '<textarea id="textSolucion' + i + '" rows="3" class="form-control" placeholder="Introducir la respuesta" required>' +
         respuesta +
         '</textarea>' +
         '</div>' +
         '<div class="row">' +
         '<div class="custom-control custom-radio ml-3">' +
-        '<input type="radio" id="correcta' + i + '" name="tipoSolucion' + i + '" class="custom-control-input" onclick="marcarSolucionCorrecta(' + i + ')">' +
+        '<input type="radio" id="correcta' + i + '" name="tipoSolucion' + i + '" class="custom-control-input" onclick="marcarSolucionCorrecta(' + i + ')" required>' +
         '<label for="correcta' + i + '" class="custom-control-label">Solución Correcta</label>' +
         '</div>' +
         '<div class="custom-control custom-radio ml-3">' +
@@ -189,13 +189,13 @@ function crearDivRazonamiento(propuestoPorAlumno, textoRazonamiento, i, j) {
     divRazonamiento.innerHTML =
         '<div class="form-group mt-3 ml-2">' +
         '<label id="labelTextRazonamiento' + j + 'solucion' + i + '" for="textRazonamiento' + j + 'solucion' + i + '"><h5 class="' + claseTitulo + '">' + titulo + '</h5></label>' +
-        '<textarea id="textRazonamiento' + j + 'solucion' + i + '" rows="3" class="form-control" placeholder="Introducir el razonamiento a la respuesta">' +
+        '<textarea id="textRazonamiento' + j + 'solucion' + i + '" rows="3" class="form-control" placeholder="Introducir el razonamiento a la respuesta" required>' +
         textoRazonamiento +
         '</textarea>' +
         '</div>' +
         '<div class="row">' +
         '<div class="custom-control custom-radio ml-4">' +
-        '<input type="radio" id="justificado' + j + 'Solucion' + i + '" name="tipoRazonamiento' + j + 'Solucion' + i + '" class="custom-control-input" onclick="marcarRazonamientoJustificado(' + i + ', ' + j + ')">' +
+        '<input type="radio" id="justificado' + j + 'Solucion' + i + '" name="tipoRazonamiento' + j + 'Solucion' + i + '" class="custom-control-input" onclick="marcarRazonamientoJustificado(' + i + ', ' + j + ')" required>' +
         '<label for="justificado' + j + 'Solucion' + i + '" class="custom-control-label">Razonamiento Justificado</label>' +
         '</div>' +
         '<div class="custom-control custom-radio ml-3">' +
@@ -235,7 +235,7 @@ function crearDivError(i, j, textoError) {
     divError.innerHTML =
         '<div class="form-group mt-3 ml-2">' +
         '<label for="textoError' + j + 'Solucion' + i + '"><h6 class="text-danger">Error</h6></label>' +
-        '<textarea id="textoError' + j + 'Solucion' + i + '" rows="3" class="form-control" placeholder="Introducir el error del razonamiento">' +
+        '<textarea id="textoError' + j + 'Solucion' + i + '" rows="3" class="form-control" placeholder="Introducir el error del razonamiento" required>' +
         textoError +
         '</textarea>' +
         '</div>';
@@ -412,7 +412,41 @@ function marcarRazonamientoJustificado(i, j) {
     }
 }
 
-function guardarCuestion(){
+function guardarCuestion() {
     console.log("guardar");
+
+    cuestion.id = idCuestion;
+    cuestion.enunciado = document.querySelector("#enunciado").textContent;
+    cuestion.disponible = document.querySelector("#disponible").checked;
+    cuestion.soluciones = [];
+
+    var i = 1;
+    var numSolucionesGuardadas = 0;
+
+    while (numSolucionesGuardadas < numSoluciones) {
+        var containerSolucion = document.querySelector("#solucion" + i);
+        if (containerSolucion != null) {
+            var solucion;
+            solucion.id = i;
+            solucion.respuesta = document.querySelector("#textSolucion" + i).textContent;
+            if (containerSolucion.classList.contains("propuestaPorAlumno")) {
+                solucion.propuestaPorAlumno = true;
+            } else {
+                solucion.propuestaPorAlumno = false;
+                if (document.querySelector("#correcta" + i).checked) {
+                    solucion.correcta = true;
+                } else {
+                    solucion.correcta = false;
+                    solucion.razonamientos = [];
+                }
+            }
+            numSolucionesGuardadas++;
+        }
+        i++;
+    }
+    
+    console.log(cuestion);
+
+
     return false;
 }
