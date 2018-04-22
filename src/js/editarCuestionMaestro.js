@@ -1,7 +1,7 @@
 var datos;
 var idCuestion;
 var cuestion;
-var numSoluciones;
+var numSoluciones = 0;
 var numRazonamientos = [];
 var sectionCuestion;
 
@@ -9,15 +9,6 @@ function mostrarCuestion() {
     datos = JSON.parse(localStorage.getItem("datos"));
     idCuestion = localStorage.getItem("editarCuestion");
     cuestion = datos.cuestiones[idCuestion - 1];
-    numSoluciones = cuestion.soluciones.length;
-
-    for (var i = 0; i < numSoluciones; i++) {
-        if (cuestion.soluciones[i].hasOwnProperty("razonamientos")) {
-            numRazonamientos[i] = cuestion.soluciones[i].razonamientos.length;
-        } else {
-            numRazonamientos[i] = 0;
-        }
-    }
 
     sectionCuestion = document.querySelector("#cuestion");
 
@@ -40,7 +31,19 @@ function mostrarCuestion() {
     sectionCuestion.appendChild(containerEnunciado);
 
     if (cuestion !== undefined) {
+        numSoluciones = cuestion.soluciones.length;
+
+        for (var i = 0; i < numSoluciones; i++) {
+            if (cuestion.soluciones[i].hasOwnProperty("razonamientos")) {
+                numRazonamientos[i] = cuestion.soluciones[i].razonamientos.length;
+            } else {
+                numRazonamientos[i] = 0;
+            }
+        }
         rellenarCampos(containerEnunciado);
+    } else {
+        numSoluciones = 0;
+        numRazonamientos = [];
     }
 }
 
@@ -359,7 +362,7 @@ function eliminarRazonamiento(i, j) {
         eliminar(divRazonamiento);
         numRazonamientos[i - 1]--;
     }
-    if(numRazonamientos[i - 1] == 0){
+    if (numRazonamientos[i - 1] == 0) {
         marcarSolucionCorrecta(i);
         document.querySelector("#correcta" + i).checked = true;
     }
@@ -391,20 +394,25 @@ function marcarSolucionCorrecta(i) {
     }
 }
 
-function marcarRazonamientoInjustificado(i, j) {    
-    var divRazonamiento = document.querySelector("#razonamiento" + j + "Solucion" + i);    
-    var divEliminar = document.querySelector("#eliminar" + j + "Solucion" + i);    
+function marcarRazonamientoInjustificado(i, j) {
+    var divRazonamiento = document.querySelector("#razonamiento" + j + "Solucion" + i);
+    var divEliminar = document.querySelector("#eliminar" + j + "Solucion" + i);
     var divError = document.querySelector("#error" + j + "Solucion" + i);
-    
+
     if (!divRazonamiento.classList.contains("propuestoPorAlumno") && divError === null) {
         divError = crearDivError(i, j, "");
         divRazonamiento.insertBefore(divError, divEliminar);
     }
 }
 
-function marcarRazonamientoJustificado(i, j){
-    var divError = document.querySelector("#error" + j  + "Solucion" + i);
-    if(divError !== null){
+function marcarRazonamientoJustificado(i, j) {
+    var divError = document.querySelector("#error" + j + "Solucion" + i);
+    if (divError !== null) {
         eliminar(divError);
-    }    
+    }
+}
+
+function guardarCuestion(){
+    console.log("guardar");
+    return false;
 }
