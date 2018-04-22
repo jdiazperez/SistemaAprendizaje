@@ -192,7 +192,7 @@ function crearDivRazonamiento(propuestoPorAlumno, textoRazonamiento, i, j) {
         '</div>' +
         '<div class="row">' +
         '<div class="custom-control custom-radio ml-4">' +
-        '<input type="radio" id="justificado' + j + 'Solucion' + i + '" name="tipoRazonamiento' + j + 'Solucion' + i + '" class="custom-control-input">' +
+        '<input type="radio" id="justificado' + j + 'Solucion' + i + '" name="tipoRazonamiento' + j + 'Solucion' + i + '" class="custom-control-input" onclick="marcarRazonamientoJustificado(' + i + ', ' + j + ')">' +
         '<label for="justificado' + j + 'Solucion' + i + '" class="custom-control-label">Razonamiento Justificado</label>' +
         '</div>' +
         '<div class="custom-control custom-radio ml-3">' +
@@ -228,10 +228,11 @@ function crearDivOpcionesSolucion(i) {
 
 function crearDivError(i, j, textoError) {
     var divError = document.createElement("div");
+    divError.id = "error" + j + "Solucion" + i;
     divError.innerHTML =
         '<div class="form-group mt-3 ml-2">' +
-        '<label for="error' + j + 'Solucion' + i + '"><h6 class="text-danger">Error</h6></label>' +
-        '<textarea id="error' + j + 'Solucion' + i + '" rows="3" class="form-control" placeholder="Introducir el error del razonamiento">' +
+        '<label for="textoError' + j + 'Solucion' + i + '"><h6 class="text-danger">Error</h6></label>' +
+        '<textarea id="textoError' + j + 'Solucion' + i + '" rows="3" class="form-control" placeholder="Introducir el error del razonamiento">' +
         textoError +
         '</textarea>' +
         '</div>';
@@ -358,6 +359,10 @@ function eliminarRazonamiento(i, j) {
         eliminar(divRazonamiento);
         numRazonamientos[i - 1]--;
     }
+    if(numRazonamientos[i - 1] == 0){
+        marcarSolucionCorrecta(i);
+        document.querySelector("#correcta" + i).checked = true;
+    }
 }
 
 function marcarSolucionIncorrecta(i) {
@@ -388,12 +393,18 @@ function marcarSolucionCorrecta(i) {
 
 function marcarRazonamientoInjustificado(i, j) {    
     var divRazonamiento = document.querySelector("#razonamiento" + j + "Solucion" + i);    
-    var divError;
     var divEliminar = document.querySelector("#eliminar" + j + "Solucion" + i);    
-    var textError = document.querySelector("#error" + j + "Solucion" + i);
+    var divError = document.querySelector("#error" + j + "Solucion" + i);
     
-    if (!divRazonamiento.classList.contains("propuestoPorAlumno") && textError === null) {
+    if (!divRazonamiento.classList.contains("propuestoPorAlumno") && divError === null) {
         divError = crearDivError(i, j, "");
         divRazonamiento.insertBefore(divError, divEliminar);
     }
+}
+
+function marcarRazonamientoJustificado(i, j){
+    var divError = document.querySelector("#error" + j  + "Solucion" + i);
+    if(divError !== null){
+        eliminar(divError);
+    }    
 }
