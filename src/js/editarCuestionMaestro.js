@@ -76,6 +76,8 @@ function rellenarSolucion(solucion, i) {
         containerSolucion.appendChild(document.createElement("hr"));
         containerSolucion.appendChild(divOpcionesSolucion);
 
+        crearDropItemNuevaPropuesta(true, i, undefined);
+
     } else {
         if (solucion.correcta) {
             containerSolucion.querySelector("#correcta" + i).checked = true;
@@ -147,6 +149,8 @@ function rellenarRazonamiento(containerSolucion, razonamiento, i, j) {
             '<button class="btn btn-success" onclick="corregirRazonamiento(' + i + ', ' + j + ')"><i class="fas fa-check-circle mr-2"></i>Corregir Razonamiento</button>' +
             '<button class="btn btn-warning ml-3" onclick="eliminarRazonamiento(' + i + ', ' + j + ')"><i class="fas fa-trash-alt mr-2"></i>Eliminar Razonamiento</button>';
         divRazonamiento.appendChild(divOpcionesRazonamiento);
+
+        crearDropItemNuevaPropuesta(false, i, j);
 
     } else {
         if (razonamiento.justificado) {
@@ -325,6 +329,8 @@ function corregirSolucion(i) {
         document.querySelector("#incorrecta" + i).checked = true;
         añadirRazonamiento(i);
     }
+    
+    eliminar(document.querySelector("#dropItem" + i));
 }
 
 function añadirRazonamiento(i) {
@@ -384,6 +390,8 @@ function corregirRazonamiento(i, j) {
     } else {
         document.querySelector("#injustificado" + j + "Solucion" + i).checked = true;
     }
+
+    eliminar(document.querySelector("#dropItem" + j + "Solucion" + i));
 }
 
 function eliminarRazonamiento(i, j) {
@@ -491,10 +499,9 @@ function guardarCuestion() {
                                 razonamiento.propuestoPorAlumno = true;
                             } else {
                                 razonamiento.propuestoPorAlumno = false;
-                                if (document.querySelector("#justificado" + j + "Solucion" + i).checked){
+                                if (document.querySelector("#justificado" + j + "Solucion" + i).checked) {
                                     razonamiento.justificado = true;
-                                }
-                                else{
+                                } else {
                                     razonamiento.justificado = false;
                                     razonamiento.error = document.querySelector("#textoError" + j + "Solucion" + i).value;
                                 }
@@ -516,6 +523,32 @@ function guardarCuestion() {
 
     datos.cuestiones[idCuestion - 1] = cuestion;
     localStorage.setItem("datos", JSON.stringify(datos));
-    
+
     return true;
+}
+
+function crearDropItemNuevaPropuesta(esSolucion, i, j) {
+    var dropdown = document.querySelector("#dropdownNuevasPropuestas");
+    var dropItem = document.createElement("a");
+    var href;
+    var texto;
+    var id;
+
+    document.querySelector(".dropdown").classList.remove("oculto");
+
+    if (esSolucion) {
+        id = "dropItem" + i;
+        href = "#solucion" + i;
+        texto = "Solución " + i;        
+    } else {
+        id = "dropItem" + j + "Solucion" + i;
+        href = "#razonamiento" + j + "Solucion" + i;
+        texto = "Razonamiento " + j + " de la Solución " + i;        
+    }
+    dropItem.id = id;
+    dropItem.className = "dropdown-item bg-info text-light";
+    dropItem.href = href;
+    dropItem.textContent = texto;
+
+    dropdown.appendChild(dropItem);
 }

@@ -16,12 +16,21 @@
 </head>
 
 <body onload="actualizarUsuarioIdentificado(); mostrarCuestion();">
-   
+
     <header id="headerGuardar" class="fixed-top bg-dark">
         <div class="container">
-            <div class="row justify-content-end">
-                <a href="listarCuestionesMaestro.html" class="btn btn-danger"><i class="fa fa-times mr-2"></i>Cancelar</a>
-                <button type="submit" form="cuestion" class="btn btn-success ml-2" id="submitGuardar"><i class="fa fa-save mr-2"></i>Guardar</button>>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="dropdown oculto">
+                        <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">Existen nuevas propuestas para corregir</button>
+                        <div id="dropdownNuevasPropuestas" class="dropdown-menu"></div>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <a href="listarCuestionesMaestro.html" class="btn btn-danger"><i class="fa fa-times mr-2"></i>Cancelar</a>
+                    <button type="submit" form="cuestion" class="btn btn-success ml-2" id="submitGuardar"><i class="fa fa-save mr-2"></i>Guardar</button>
+                </div>
+
             </div>
         </div>
     </header>
