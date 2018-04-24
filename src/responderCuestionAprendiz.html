@@ -15,7 +15,7 @@
     <title>Sistema de Aprendizaje</title>
 </head>
 
-<body>
+<body onload="actualizarUsuarioIdentificado(); mostrarCuestion();">
     <header id="headerGuardar" class="fixed-top bg-dark">
         <div class="container">
             <div class="row justify-content-end">
@@ -27,129 +27,133 @@
     <header>
         <nav id="navbar" class="navbar navbar-expand-sm navbar-dark bg-primary fixed-top pt-3">
             <div class="container">
-                <a href="#" class="navbar-brand h1">Sistema de Aprendizaje</a>
+                <span class="navbar-brand h1">Sistema de Aprendizaje</span>
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link">Aprendiz: a</a>
+                        <a id="usuarioIdentificado" class="nav-link"></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Cerrar Sesión</a>
+                        <a class="nav-link" href="index.html">Cerrar Sesión</a>
                     </li>
                 </ul>
             </div>
         </nav>
     </header>
 
-    <section>
+    <section id="sectionCuestion">
+        <div class="container bg-light border p-4 mt-2">
+            <div class="form-group">
+                <label for="enunciado"><h4 class="text-primary">Enunciado</h4></label>
+                <input type="text" id="enunciado" class="form-control" placeholder="Introducir la pregunta">
+            </div>
+        </div>
 
-
-        <form action="#">
-
-            <div class="container bg-light border p-4 mt-2">
-                <div class="form-group">
-                    <label for="enunciado"><h4 class="text-primary">Enunciado</h4></label>
-                    <input type="text" id="enunciado" class="form-control" placeholder="Introducir la pregunta">
-                </div>
+        <div class="container bg-light border p-4 mt-2">
+            <div class="form-group">
+                <label for="propuestaSolucionA"><h4 class="text-primary">Propuesta de Solución</h4></label>
+                <textarea id="propuestaSolucionA" rows="3" class="form-control" placeholder="Introduce la respuesta a la pregunta"></textarea>
+            </div>
+            <div class="row mt-3 ml-1">
+                <button class="btn btn-success"><i class="fas fa-share-square mr-2"></i>Enviar Solución</button>
             </div>
 
-            <div class="container bg-light border p-4 mt-2">
-                <div class="form-group">
-                    <label for="propuestaSolucion"><h4 class="text-primary">Propuesta de Solución</h4></label>
-                    <textarea id="solucion1" rows="3" class="form-control" placeholder="Introduce la respuesta a la pregunta"></textarea>
-                </div>
-                <div class="row mt-3 ml-1">
-                    <button class="btn btn-success"><i class="fas fa-share-square mr-2"></i>Enviar Solución</button>
-                </div>
-
-                <div class="alert alert-info mt-3 ml-1">
-                    Se ha enviado para su corrección manual
-                </div>
-
+            <div class="alert alert-info mt-3 ml-1">
+                Se ha enviado para su corrección manual
             </div>
 
-            <div class="container bg-light border p-4 mt-2">
-                <div class="form-group">
-                    <label for="solucion1"><h4 class="text-primary">Solución 1</h4></label>
-                    <textarea id="solucion1" rows="3" class="form-control" placeholder="Introducir la respuesta"></textarea>
+        </div>
+
+        <div class="container bg-light border p-4 mt-2">
+            <div class="form-group">
+                <label for="solucionA"><h4 class="text-primary">Solución 1</h4></label>
+                <textarea id="solucionA" rows="3" class="form-control" placeholder="Introducir la respuesta"></textarea>
+            </div>
+            <div class="row">
+                <div class="custom-control custom-radio ml-3">
+                    <input type="radio" id="correctaA" name="tipoSolucionA" class="custom-control-input">
+                    <label for="correctaA" class="custom-control-label">Solución Correcta</label>
                 </div>
-                <div class="row">
-                    <div class="custom-control custom-radio ml-3">
-                        <input type="radio" id="correcta1" name="tipoSolucion1" class="custom-control-input">
-                        <label for="correcta1" class="custom-control-label">Solución Correcta</label>
-                    </div>
-                    <div class="custom-control custom-radio ml-3">
-                        <input type="radio" id="incorrecta1" name="tipoSolucion1" class="custom-control-input">
-                        <label for="incorrecta1" class="custom-control-label">Solución Incorrecta</label>
-                    </div>
-                </div>
-                <div class="row mt-3 ml-1">
-                    <button class="btn btn-success"><i class="fas fa-check-circle mr-2"></i>Corregir</button>
-                </div>
-                <div class="alert alert-success mt-3 ml-1">
-                    <strong>Acierto</strong>
+                <div class="custom-control custom-radio ml-3">
+                    <input type="radio" id="incorrectaA" name="tipoSolucionA" class="custom-control-input">
+                    <label for="incorrectaA" class="custom-control-label">Solución Incorrecta</label>
                 </div>
             </div>
+            <div class="row mt-3 ml-1">
+                <button class="btn btn-success"><i class="fas fa-check-circle mr-2"></i>Corregir</button>
+            </div>
+            <div class="alert alert-success mt-3 ml-1">
+                <strong>Acierto</strong>
+            </div>
+        </div>
 
-            <div class="container bg-light border p-4 mt-2">
-                <div class="form-group">
-                    <label for="solucion2"><h4 class="text-primary">Solución 2</h4></label>
-                    <textarea id="solucion2" rows="3" class="form-control" placeholder="Introducir la respuesta"></textarea>
+        <div class="container bg-light border p-4 mt-2">
+            <div class="form-group">
+                <label for="solucionB"><h4 class="text-primary">Solución 2</h4></label>
+                <textarea id="solucionB" rows="3" class="form-control" placeholder="Introducir la respuesta"></textarea>
+            </div>
+            <div class="row">
+                <div class="custom-control custom-radio ml-3">
+                    <input type="radio" id="correctaB" name="tipoSolucionB" class="custom-control-input">
+                    <label for="correctaB" class="custom-control-label">Solución Correcta</label>
                 </div>
-                <div class="row">
-                    <div class="custom-control custom-radio ml-3">
-                        <input type="radio" id="correcta2" name="tipoSolucion2" class="custom-control-input">
-                        <label for="correcta2" class="custom-control-label">Solución Correcta</label>
-                    </div>
-                    <div class="custom-control custom-radio ml-3">
-                        <input type="radio" id="incorrecta2" name="tipoSolucion2" class="custom-control-input">
-                        <label for="incorrecta2" class="custom-control-label">Solución Incorrecta</label>
-                    </div>
-                </div>
-                <div class="alert alert-danger mt-3 ml-1">
-                    <strong>Fallo</strong>
-                </div>
-                <hr>
-                <div class="form-group mt-3 ml-2">
-                    <label for="razonamiento1solucion2"><h5 class="text-info">Propuesta de Razonamiento</h5></label>
-                    <textarea id="solucion2" rows="3" class="form-control" placeholder="Introducir el razonamiento a la respuesta"></textarea>
-                </div>
-
-                <div class="row mt-3 ml-2">
-                    <button class="btn btn-success"><i class="fas fa-share-square mr-2"></i>Enviar Razonamiento</button>
-                </div>
-                <div class="alert alert-info mt-3 ml-1">
-                    Se ha enviado para su corrección manual
-                </div>
-                <hr>
-                <div class="form-group mt-3 ml-2">
-                    <label for="razonamiento1solucion3"><h5 class="text-info">Razonamiento 1</h5></label>
-                    <textarea id="solucion3" rows="3" class="form-control" placeholder="Introducir el razonamiento a la respuesta"></textarea>
-                </div>
-
-                <div class="row">
-                    <div class="custom-control custom-radio ml-4">
-                        <input type="radio" id="justificado1Solucion3" name="tipoRazonamiento1Solucion3" class="custom-control-input">
-                        <label for="justificado1Solucion3" class="custom-control-label">Razonamiento Justificado</label>
-                    </div>
-                    <div class="custom-control custom-radio ml-3">
-                        <input type="radio" id="noJustificado1Solucion3" name="tipoRazonamiento1Solucion3" class="custom-control-input">
-                        <label for="noJustificado1Solucion3" class="custom-control-label">Razonamiento Injustificado</label>
-                    </div>
-                </div>
-                <div class="row mt-3 ml-1">
-                    <button class="btn btn-success"><i class="fas fa-check-circle mr-2"></i>Corregir</button>
-                </div>
-                <div class="alert alert-success mt-3 ml-1">
-                    <strong>Acierto</strong>
+                <div class="custom-control custom-radio ml-3">
+                    <input type="radio" id="incorrectaB" name="tipoSolucionB" class="custom-control-input">
+                    <label for="incorrectaB" class="custom-control-label">Solución Incorrecta</label>
                 </div>
             </div>
-        </form>
+            <div class="alert alert-danger mt-3 ml-1">
+                <strong>Fallo</strong>
+            </div>
+            <hr>
+            <div class="form-group mt-3 ml-2">
+                <label for="propuestaRazonamiento1SolucionB"><h5 class="text-info">Propuesta de Razonamiento</h5></label>
+                <textarea id="propuestaRazonamiento1SolucionB" rows="3" class="form-control" placeholder="Introducir el razonamiento a la respuesta"></textarea>
+            </div>
+
+            <div class="row mt-3 ml-2">
+                <button class="btn btn-success"><i class="fas fa-share-square mr-2"></i>Enviar Razonamiento</button>
+            </div>
+            <div class="alert alert-info mt-3 ml-1">
+                Se ha enviado para su corrección manual
+            </div>
+            <hr>
+            <div class="form-group mt-3 ml-2">
+                <label for="razonamiento1solucionB"><h5 class="text-info">Razonamiento 1</h5></label>
+                <textarea id="razonamiento1solucionB" rows="3" class="form-control" placeholder="Introducir el razonamiento a la respuesta"></textarea>
+            </div>
+
+            <div class="row">
+                <div class="custom-control custom-radio ml-4">
+                    <input type="radio" id="justificado1SolucionB" name="tipoRazonamiento1SolucionB" class="custom-control-input">
+                    <label for="justificado1SolucionB" class="custom-control-label">Razonamiento Justificado</label>
+                </div>
+                <div class="custom-control custom-radio ml-3">
+                    <input type="radio" id="injustificado1SolucionB" name="tipoRazonamiento1SolucionB" class="custom-control-input">
+                    <label for="injustificado1SolucionB" class="custom-control-label">Razonamiento Injustificado</label>
+                </div>
+            </div>
+            <div class="row mt-3 ml-1">
+                <button class="btn btn-success"><i class="fas fa-check-circle mr-2"></i>Corregir</button>
+            </div>
+            <div class="alert alert-success mt-3 ml-1">
+                <strong>Acierto</strong>
+            </div>
+        </div>
+
     </section>
+
+    <footer class="footer bg-primary mt-3">
+        <div class="container bg-primary text-right py-2">
+            <a href="#top"><i class="fas fa-arrow-up text-white"></i></a>
+        </div>
+    </footer>
 
 
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/actualizarUsuarioIdentificado.js"></script>
+    <script src="js/responderCuestionAprendiz.js"></script>
 
 
 
