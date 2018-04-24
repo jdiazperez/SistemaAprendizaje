@@ -19,7 +19,7 @@
     <header id="headerGuardar" class="fixed-top bg-dark">
         <div class="container">
             <div class="row justify-content-end">
-                <button class="btn btn-danger"><i class="fa fa-times mr-2"></i>Cerrar Cuestión</button>
+                <a href="listarCuestionesAprendiz.html" class="btn btn-danger"><i class="fa fa-times mr-2"></i>Cerrar Cuestión</a>
             </div>
         </div>
     </header>
@@ -41,105 +41,6 @@
     </header>
 
     <section id="sectionCuestion">
-        <div class="container bg-light border p-4 mt-2">
-            <div class="form-group">
-                <label for="enunciado"><h4 class="text-primary">Enunciado</h4></label>
-                <input type="text" id="enunciado" class="form-control" placeholder="Introducir la pregunta">
-            </div>
-        </div>
-
-        <div class="container bg-light border p-4 mt-2">
-            <div class="form-group">
-                <label for="propuestaSolucionA"><h4 class="text-primary">Propuesta de Solución</h4></label>
-                <textarea id="propuestaSolucionA" rows="3" class="form-control" placeholder="Introduce la respuesta a la pregunta"></textarea>
-            </div>
-            <div class="row mt-3 ml-1">
-                <button class="btn btn-success"><i class="fas fa-share-square mr-2"></i>Enviar Solución</button>
-            </div>
-
-            <div class="alert alert-info mt-3 ml-1">
-                Se ha enviado para su corrección manual
-            </div>
-
-        </div>
-
-        <div class="container bg-light border p-4 mt-2">
-            <div class="form-group">
-                <label for="solucionA"><h4 class="text-primary">Solución 1</h4></label>
-                <textarea id="solucionA" rows="3" class="form-control" placeholder="Introducir la respuesta"></textarea>
-            </div>
-            <div class="row">
-                <div class="custom-control custom-radio ml-3">
-                    <input type="radio" id="correctaA" name="tipoSolucionA" class="custom-control-input">
-                    <label for="correctaA" class="custom-control-label">Solución Correcta</label>
-                </div>
-                <div class="custom-control custom-radio ml-3">
-                    <input type="radio" id="incorrectaA" name="tipoSolucionA" class="custom-control-input">
-                    <label for="incorrectaA" class="custom-control-label">Solución Incorrecta</label>
-                </div>
-            </div>
-            <div class="row mt-3 ml-1">
-                <button class="btn btn-success"><i class="fas fa-check-circle mr-2"></i>Corregir</button>
-            </div>
-            <div class="alert alert-success mt-3 ml-1">
-                <strong>Acierto</strong>
-            </div>
-        </div>
-
-        <div class="container bg-light border p-4 mt-2">
-            <div class="form-group">
-                <label for="solucionB"><h4 class="text-primary">Solución 2</h4></label>
-                <textarea id="solucionB" rows="3" class="form-control" placeholder="Introducir la respuesta"></textarea>
-            </div>
-            <div class="row">
-                <div class="custom-control custom-radio ml-3">
-                    <input type="radio" id="correctaB" name="tipoSolucionB" class="custom-control-input">
-                    <label for="correctaB" class="custom-control-label">Solución Correcta</label>
-                </div>
-                <div class="custom-control custom-radio ml-3">
-                    <input type="radio" id="incorrectaB" name="tipoSolucionB" class="custom-control-input">
-                    <label for="incorrectaB" class="custom-control-label">Solución Incorrecta</label>
-                </div>
-            </div>
-            <div class="alert alert-danger mt-3 ml-1">
-                <strong>Fallo</strong>
-            </div>
-            <hr>
-            <div class="form-group mt-3 ml-2">
-                <label for="propuestaRazonamiento1SolucionB"><h5 class="text-info">Propuesta de Razonamiento</h5></label>
-                <textarea id="propuestaRazonamiento1SolucionB" rows="3" class="form-control" placeholder="Introducir el razonamiento a la respuesta"></textarea>
-            </div>
-
-            <div class="row mt-3 ml-2">
-                <button class="btn btn-success"><i class="fas fa-share-square mr-2"></i>Enviar Razonamiento</button>
-            </div>
-            <div class="alert alert-info mt-3 ml-1">
-                Se ha enviado para su corrección manual
-            </div>
-            <hr>
-            <div class="form-group mt-3 ml-2">
-                <label for="razonamiento1solucionB"><h5 class="text-info">Razonamiento 1</h5></label>
-                <textarea id="razonamiento1solucionB" rows="3" class="form-control" placeholder="Introducir el razonamiento a la respuesta"></textarea>
-            </div>
-
-            <div class="row">
-                <div class="custom-control custom-radio ml-4">
-                    <input type="radio" id="justificado1SolucionB" name="tipoRazonamiento1SolucionB" class="custom-control-input">
-                    <label for="justificado1SolucionB" class="custom-control-label">Razonamiento Justificado</label>
-                </div>
-                <div class="custom-control custom-radio ml-3">
-                    <input type="radio" id="injustificado1SolucionB" name="tipoRazonamiento1SolucionB" class="custom-control-input">
-                    <label for="injustificado1SolucionB" class="custom-control-label">Razonamiento Injustificado</label>
-                </div>
-            </div>
-            <div class="row mt-3 ml-1">
-                <button class="btn btn-success"><i class="fas fa-check-circle mr-2"></i>Corregir</button>
-            </div>
-            <div class="alert alert-success mt-3 ml-1">
-                <strong>Acierto</strong>
-            </div>
-        </div>
-
     </section>
 
     <footer class="footer bg-primary mt-3">

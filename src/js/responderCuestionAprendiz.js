@@ -1,8 +1,6 @@
 var datos;
 var idCuestion;
 var cuestion;
-var numSoluciones = 0;
-var numRazonamientos = [];
 var sectionCuestion;
 
 function mostrarCuestion() {
@@ -11,12 +9,12 @@ function mostrarCuestion() {
     cuestion = datos.cuestiones[idCuestion - 1];
     sectionCuestion = document.querySelector("#sectionCuestion");
 
-    mostrarEnunciado();
-    mostrarPropuestaSolucion();
-    mostrarSoluciones(cuestion.soluciones);
+    añadirEnunciado();
+    añadirPropuestaSolucion();
+    añadirSoluciones(cuestion.soluciones);
 }
 
-function mostrarEnunciado() {
+function añadirEnunciado() {
     var containerEnunciado = document.createElement("div");
     containerEnunciado.className = "container bg-light border p-4 mt-2";
     containerEnunciado.innerHTML =
@@ -29,10 +27,10 @@ function mostrarEnunciado() {
     sectionCuestion.appendChild(containerEnunciado);
 }
 
-function mostrarPropuestaSolucion() {
+function añadirPropuestaSolucion() {
     var containerPropuestaSolucion = document.createElement("div");
     containerPropuestaSolucion.id = "propuestaSolucion";
-    containerPropuestaSolucion.className = "container bg-light border p-4 mt-2";
+    containerPropuestaSolucion.className = "container bg-light border p-4 mt-4";
     containerPropuestaSolucion.innerHTML =
         '<form id="formPropuestaSolucion" onsubmit="return enviarPropuestaSolucion()">' +
         '<div class="form-group">' +
@@ -70,10 +68,12 @@ function enviarPropuestaSolucion() {
 
     localStorage.setItem("datos", JSON.stringify(datos));
 
+    mostrarSolucion(1);
+
     return false;
 }
 
-function mostrarSoluciones(soluciones) {
+function añadirSoluciones(soluciones) {
     var containerSolucion;
     var solucion;
     for (var i = 1; i <= soluciones.length; i++) {
@@ -81,7 +81,7 @@ function mostrarSoluciones(soluciones) {
         if (!solucion.propuestaPorAlumno) {
             containerSolucion = crearContainerSolucion(i, solucion.respuesta);
             if (!solucion.correcta) {
-                mostrarRazonamientos(i, solucion, containerSolucion);
+                añadirRazonamientos(i, solucion, containerSolucion);
             }
             sectionCuestion.appendChild(containerSolucion);
         }
@@ -91,7 +91,7 @@ function mostrarSoluciones(soluciones) {
 function crearContainerSolucion(i, respuesta) {
     var containerSolucion = document.createElement("div");
     containerSolucion.id = "solucion" + i;
-    containerSolucion.className = "container bg-light border p-4 mt-2";
+    containerSolucion.className = "container bg-light border p-4 mt-4 oculto";
     containerSolucion.innerHTML =
         '<div class="form-group">' +
         '<label for="textoSolucion' + i + '"><h4 class="text-primary">Solución ' + i + '</h4></label>' +
@@ -136,12 +136,18 @@ function corregirSolucion(i) {
         btnCorregir.disabled = true;
         radioCorrecta.disabled = true;
         radioIncorrecta.disabled = true;
+
+        if (!solucion.correcta) {
+            mostrarPropuestaRazonamiento(i);
+        } else {
+            mostrarSolucion(i + 1);
+        }
+
     }
 }
 
-function mostrarRazonamientos(i, solucion, containerSolucion) {
+function añadirRazonamientos(i, solucion, containerSolucion) {
     var divPropuestaRazonamiento = crearDivPropuestaRazonamiento(i);
-    containerSolucion.appendChild(document.createElement("hr"));
     containerSolucion.appendChild(divPropuestaRazonamiento);
 
     for (var j = 1; j <= solucion.razonamientos.length; j++) {
@@ -149,7 +155,6 @@ function mostrarRazonamientos(i, solucion, containerSolucion) {
 
         if (!razonamiento.propuestoPorAlumno) {
             var divRazonamiento = crearDivRazonamiento(i, j, razonamiento.texto);
-            containerSolucion.appendChild(document.createElement("hr"));
             containerSolucion.appendChild(divRazonamiento);
 
             if (!razonamiento.justificado) {
@@ -163,9 +168,10 @@ function mostrarRazonamientos(i, solucion, containerSolucion) {
 function crearDivPropuestaRazonamiento(i) {
     var divPropuestaRazonamiento = document.createElement("div");
     divPropuestaRazonamiento.id = "propuestaRazonamiento" + i;
+    divPropuestaRazonamiento.className = "oculto";
     divPropuestaRazonamiento.innerHTML =
         '<form id="formPropuestaRazonamiento' + i + '" onsubmit="return enviarPropuestaRazonamiento(' + i + ')">' +
-        '<div class="form-group mt-3 ml-2">' +
+        '<div class="form-group mt-5 ml-2">' +
         '<label for="textoPropuestaRazonamiento' + i + '"><h5 class="text-info">Propuesta de Razonamiento</h5></label>' +
         '<textarea id="textoPropuestaRazonamiento' + i + '" rows="3" class="form-control" placeholder="¿Por qué la solución es incorrecta?. Escribe un razonamiento" required></textarea>' +
         '</div>' +
@@ -196,7 +202,11 @@ function enviarPropuestaRazonamiento(i) {
     datos.cuestiones[idCuestion - 1] = cuestion;
 
     localStorage.setItem("datos", JSON.stringify(datos));
-    console.log(JSON.parse(localStorage.getItem("datos")));
+
+    var razonamientoMostrado = mostrarRazonamiento(i, 1);
+    if (razonamientoMostrado === false) {
+        mostrarSolucion(i + 1);
+    }
 
     return false;
 }
@@ -204,8 +214,9 @@ function enviarPropuestaRazonamiento(i) {
 function crearDivRazonamiento(i, j, texto) {
     var divRazonamiento = document.createElement("div");
     divRazonamiento.id = "razonamiento" + j + "Solucion" + i;
+    divRazonamiento.className = "oculto";
     divRazonamiento.innerHTML =
-        '<div class="form-group mt-3 ml-2">' +
+        '<div class="form-group mt-5 ml-2">' +
         '<label for="textoRazonamiento' + j + 'Solucion' + i + '"><h5 class="text-info">Razonamiento ' + j + '</h5></label>' +
         '<textarea id="textoRazonamiento' + j + 'Solucion' + i + '" rows="3" class="form-control" readonly>' + texto + '</textarea>' +
         '</div>' +
@@ -248,17 +259,54 @@ function corregirRazonamiento(i, j) {
         btnCorregir.disabled = true;
         radioJustificado.disabled = true;
         radioInjustificado.disabled = true;
+
+        if (!razonamiento.justificado) {
+            var divError = document.querySelector("#error" + j + "Solucion" + i);
+            divError.classList.remove("oculto");
+        }
+
+        var razonamientoMostrado = mostrarRazonamiento(i, j + 1);
+        if (razonamientoMostrado === false) {
+            mostrarSolucion(i + 1);
+        }
     }
 }
 
 function crearDivError(i, j, textoError) {
     var divError = document.createElement("div");
-    divError.classList = "ml-2";
+    divError.classList = "ml-2 oculto";
     divError.id = "error" + j + "Solucion" + i;
     divError.innerHTML =
-        '<div class="form-group mt-3 ml-2">' +
+        '<div class="form-group mt-4 ml-2">' +
         '<label for="textoError' + j + 'Solucion' + i + '"><h6 class="text-danger">Por qué el razonamiento no está bien justificado:</h6></label>' +
         '<textarea id="textoError' + j + 'Solucion' + i + '" rows="3" class="form-control" readonly>' + textoError + '</textarea>' +
         '</div>';
     return divError;
+}
+
+function mostrarSolucion(i) {
+    var containerSolucion = document.querySelector("#solucion" + i);
+    if (containerSolucion !== null) {
+        containerSolucion.classList.remove("oculto");
+    }
+}
+
+function mostrarPropuestaRazonamiento(i) {
+    var containerSolucion = document.querySelector("#solucion" + i);
+    var divPropuestaRazonamiento = document.querySelector("#propuestaRazonamiento" + i);
+
+    containerSolucion.insertBefore(document.createElement("hr"), divPropuestaRazonamiento);
+    divPropuestaRazonamiento.classList.remove("oculto");
+}
+
+function mostrarRazonamiento(i, j) {
+    var mostradoCorrectamente = false;
+    var divRazonamiento = document.querySelector("#razonamiento" + j + "Solucion" + i);
+    if (divRazonamiento !== null) {
+        var containerSolucion = document.querySelector("#solucion" + i);
+        containerSolucion.insertBefore(document.createElement("hr"), divRazonamiento);
+        divRazonamiento.classList.remove("oculto");
+        mostradoCorrectamente = true;
+    }
+    return mostradoCorrectamente;
 }
