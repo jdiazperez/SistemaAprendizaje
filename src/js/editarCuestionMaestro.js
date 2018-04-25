@@ -108,11 +108,11 @@ function crearContainerSolucion(propuestaPorAlumno, respuesta, i) {
     var claseTitulo;
 
     if (propuestaPorAlumno) {
-        claseContainerSolucion = "container bg-light border border-info p-4 mt-2 propuestaPorAlumno";
+        claseContainerSolucion = "container bg-light border border-info p-4 mt-4 propuestaPorAlumno";
         titulo = "¡¡¡Propuesta de Solución!!!";
         claseTitulo = "text-light bg-info";
     } else {
-        claseContainerSolucion = "container bg-light border p-4 mt-2";
+        claseContainerSolucion = "container bg-light border p-4 mt-4";
         titulo = "Solución " + i;
         claseTitulo = "text-primary";
     }
@@ -177,12 +177,12 @@ function crearDivRazonamiento(propuestoPorAlumno, textoRazonamiento, i, j) {
     var claseTitulo;
 
     if (propuestoPorAlumno) {
-        claseDivRazonamiento = "border border-info propuestoPorAlumno";
+        claseDivRazonamiento = "border border-info propuestoPorAlumno mt-5 ml-2";
         titulo = "¡¡¡Propuesta de Razonamiento!!!";
         claseTitulo = "text-light bg-info";
 
     } else {
-        claseDivRazonamiento = "";
+        claseDivRazonamiento = "mt-5 ml-2";
         titulo = "Razonamiento " + j;
         claseTitulo = "text-info";
     }
@@ -191,7 +191,7 @@ function crearDivRazonamiento(propuestoPorAlumno, textoRazonamiento, i, j) {
     divRazonamiento.id = "razonamiento" + j + "Solucion" + i;
     divRazonamiento.className = claseDivRazonamiento;
     divRazonamiento.innerHTML =
-        '<div class="form-group mt-3 ml-2">' +
+        '<div class="form-group">' +
         '<label for="textoRazonamiento' + j + 'Solucion' + i + '"><h5 class="' + claseTitulo + '">' + titulo + '</h5></label>' +
         '<textarea id="textoRazonamiento' + j + 'Solucion' + i + '" rows="3" class="form-control" placeholder="Introducir el razonamiento a la respuesta" required>' +
         textoRazonamiento +
@@ -264,7 +264,6 @@ function nuevaSolucion() {
     var divEliminarSolucion;
 
     var idSolucion = 1;
-
     while (document.querySelector("#solucion" + idSolucion) !== null) {
         idSolucion++;
     }
@@ -329,7 +328,7 @@ function corregirSolucion(i) {
         document.querySelector("#incorrecta" + i).checked = true;
         añadirRazonamiento(i);
     }
-    
+
     eliminar(document.querySelector("#dropItem" + i));
 }
 
@@ -341,7 +340,6 @@ function añadirRazonamiento(i) {
     var divOpcionesSolucion;
 
     var idRazonamiento = 1;
-
     while (document.querySelector("#razonamiento" + idRazonamiento + "Solucion" + i) !== null) {
         idRazonamiento++;
     }
@@ -390,7 +388,6 @@ function corregirRazonamiento(i, j) {
     } else {
         document.querySelector("#injustificado" + j + "Solucion" + i).checked = true;
     }
-
     eliminar(document.querySelector("#dropItem" + j + "Solucion" + i));
 }
 
@@ -506,10 +503,8 @@ function guardarCuestion() {
                                     razonamiento.error = document.querySelector("#textoError" + j + "Solucion" + i).value;
                                 }
                             }
-
                             solucion.razonamientos.push(razonamiento);
                             numRazonamientosGuardados++;
-
                         }
                         j++;
                     }
@@ -539,11 +534,11 @@ function crearDropItemNuevaPropuesta(esSolucion, i, j) {
     if (esSolucion) {
         id = "dropItem" + i;
         href = "#solucion" + i;
-        texto = "Solución " + i;        
+        texto = "Solución " + i;
     } else {
         id = "dropItem" + j + "Solucion" + i;
         href = "#razonamiento" + j + "Solucion" + i;
-        texto = "Razonamiento " + j + " de la Solución " + i;        
+        texto = "Razonamiento " + j + " de la Solución " + i;
     }
     dropItem.id = id;
     dropItem.className = "dropdown-item bg-info text-light";

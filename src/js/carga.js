@@ -146,6 +146,6 @@ function cargar() {
     }
 
     localStorage.setItem("datos", JSON.stringify(datos));
-
+    alert("Cargados usuarios y cuestiones");
     console.log(JSON.parse(localStorage.getItem("datos")));
 }

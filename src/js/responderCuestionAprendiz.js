@@ -62,7 +62,6 @@ function enviarPropuestaSolucion() {
     solucion.respuesta = texto.value;
     solucion.propuestaPorAlumno = true;
 
-
     cuestion.soluciones.push(solucion);
     datos.cuestiones[idCuestion - 1] = cuestion;
 
@@ -142,7 +141,6 @@ function corregirSolucion(i) {
         } else {
             mostrarSolucion(i + 1);
         }
-
     }
 }
 
